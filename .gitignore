@@ -2,3 +2,4 @@
 forge-cache/
 out/
 .gas-snapshot
+node_modules
