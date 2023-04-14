@@ -1,0 +1,4 @@
+# Foundry files
+forge-cache/
+out/
+.gas-snapshot
