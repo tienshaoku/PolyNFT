@@ -1,5 +1,8 @@
 # Foundry files
 forge-cache/
 out/
+typechain-types/
+cache/
+artifacts/
 .gas-snapshot
 node_modules
