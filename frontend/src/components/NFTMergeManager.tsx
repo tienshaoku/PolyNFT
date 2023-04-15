@@ -87,17 +87,17 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
         console.log(sourceNFTItems)
         setUIState(UIState.MERGING)
         try {
-            const newImageResult = await fetch("http://localhost:3001/api/v1/fuse", {
+            const fusedResult = await fetch("http://localhost:3001/api/v1/fuse/upload", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     urlList: ["https://ipfs.io/ipfs/QmbPbq16xF4PsowtbSDKa4qcWFManZAnvYbfxhjMPgZ8Jw"],
-                    // TODO: add prompt
+                    prompt,
                 }),
             })
-            const { ipfs: newNFTImageUri } = await newImageResult.json()
+            const { ipfs: newNFTImageUri } = await fusedResult.json()
             console.log(newNFTImageUri)
 
             // TODO: call contract fuse(new img uri, description, data)
@@ -109,7 +109,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
         } catch (error) {
             setUIState(UIState.INIT)
             toast({
-                title: `Hatch new NFT failed 😭`,
+                title: `Fuse new NFT failed 😭`,
                 position: "top",
                 status: "error",
                 duration: 2000,
