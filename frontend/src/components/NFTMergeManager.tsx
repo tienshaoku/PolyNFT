@@ -19,16 +19,8 @@ import NFTGrid from "./NFTGrid"
 import NFTItem, { NFTItemProps } from "./NFTItem"
 import { motion } from "framer-motion"
 import Box3D from "./Box3D"
-
-function mockAsyncFunction() {
-    return new Promise(resolve => {
-        // Simulate an asynchronous operation that takes some time to complete
-        setTimeout(() => {
-            // Resolve the Promise with the desired data
-            resolve("Some data")
-        }, 2000)
-    })
-}
+import { polyNftRegistryClient } from "services/PolyNftRegistry"
+import { POLY_NFT_REGISTRY_ADDR } from "constants/address"
 
 const FLASH_DURATION = 800
 
@@ -41,9 +33,10 @@ enum UIState {
 type Props = {
     items: NFTItemProps[]
     maxSelectionAmount?: number
+    projectName: string
 }
 
-const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
+const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) => {
     const toast = useToast()
 
     const [selectedItems, setSelectedItems] = useState<string[]>([])
@@ -91,7 +84,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    urlList: ["https://ipfs.io/ipfs/QmbPbq16xF4PsowtbSDKa4qcWFManZAnvYbfxhjMPgZ8Jw"],
+                    urlList: selectedItems,
                     prompt,
                 }),
             })
@@ -99,11 +92,13 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
             const { ipfs: newNFTImageUri } = await fusedResult.json()
             console.log({ newNFTImageUri })
 
-            // TODO: call contract fuse(new img uri, description, data)
-            const result = await mockAsyncFunction()
-            setNewNFTItem({ id: "newNFT", data: { imageUri: newNFTImageUri, imageDescription: prompt } })
+            const selectedOrders = items
+                .filter(i => selectedItems.includes(i.orderData.tokenId.toString()))
+                .map(i => i.orderData)
+            await polyNftRegistryClient.fuse(selectedOrders, newNFTImageUri, prompt, POLY_NFT_REGISTRY_ADDR)
+            // const result = await mockAsyncFunction()
+            setNewNFTItem({ id: "newNFT", imageUri: newNFTImageUri, orderData: selectedOrders[0] })
 
-            // TODO: display unboxed new NFT!
             setUIState(UIState.MERGED)
         } catch (error: any) {
             setUIState(UIState.INIT)
@@ -120,7 +115,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
 
     const navigate = useNavigate()
     const handleList = () => {
-        navigate("/list")
+        navigate(`/projects/${projectName}/profile`)
     }
 
     return (
@@ -198,7 +193,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
                                 <Box w={"40%"} maxWidth={"500px"}>
                                     <NFTItem {...newNFTItem} />
                                     <Heading mt={4} size={"md"} textAlign={"center"}>
-                                        {newNFTItem?.data?.imageDescription}
+                                        {prompt}
                                     </Heading>
                                 </Box>
                             )}

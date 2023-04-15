@@ -21,6 +21,7 @@ export interface IOrderTokenInfo {
     fusionSourceTokenIds: Big[]
     polyNftErc721: string
     fusionCost: Big
+    timestamp: Big
 }
 
 class PolyNftRegistryClient {
@@ -90,6 +91,7 @@ class PolyNftRegistryClient {
                     fusionSourceTokenIds: val[4].map(item => bigNum2Big(item, 0)),
                     polyNftErc721: val[5],
                     fusionCost: bigNum2Big(val[6], 0),
+                    timestamp: bigNum2Big(val[7], 0),
                 } as IOrderTokenInfo),
         )
     }

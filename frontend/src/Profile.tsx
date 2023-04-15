@@ -1,5 +1,6 @@
 import { Box, Grid } from "@chakra-ui/react"
 import { Layout } from "Layout"
+import Big from "big.js"
 import { Loading } from "components/Loading"
 import NFTGrid from "components/NFTGrid"
 import { NFTItemProps } from "components/NFTItem"
@@ -36,9 +37,14 @@ export function Profile() {
                 setUnregisteredNftItems(
                     _unregisteredNftItems.map((v, i) => ({
                         id: v.tokenId.toString(),
-                        data: {
-                            imageUri: v.tokenURI,
-                            imageDescription: v.description,
+                        imageUri: v.tokenURI,
+                        // NOTE: not used so mock
+                        orderData: {
+                            polyNftErc721Address: "",
+                            tokenId: Big(0),
+                            fusionCost: Big(0),
+                            timestamp: Big(0),
+                            description: "",
                         },
                         showButton: true,
                         isListed: false,
@@ -47,10 +53,8 @@ export function Profile() {
                 setRegisteredNftItems(
                     _registeredNftItems.map((v, i) => ({
                         id: v.tokenId.toString(),
-                        data: {
-                            imageUri: _registeredNftItemsUri[i],
-                            imageDescription: v.description,
-                        },
+                        imageUri: _registeredNftItemsUri[i],
+                        orderData: v,
                         showButton: true,
                         isListed: true,
                     })),
