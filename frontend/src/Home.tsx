@@ -19,8 +19,11 @@ export function Home() {
         <Grid bgColor={"black"} h="100vh" justifyContent={"center"} alignItems={"center"}>
             <Grid gap="25px">
                 <Grid justifyContent={"center"}>
-                    <Text fontSize="42px" color="green" fontFamily={"fantasy"}>
-                        NFT POLYMERIZATION
+                    <Text fontSize="42px" color="white" fontFamily={"serif"} letterSpacing={"8px"}>
+                        NFT
+                    </Text>
+                    <Text fontSize="42px" color="white" fontFamily={"serif"} letterSpacing={"8px"}>
+                        POLYMERIZATION
                     </Text>
                 </Grid>
                 <Image src={logo} w="500px" />
