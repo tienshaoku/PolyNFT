@@ -10,7 +10,7 @@ const NFTGrid = ({ items, itemClickHandler, ...props }: Props) => {
     return (
         <Grid templateColumns="repeat(4, 1fr)" gap={6} {...props}>
             {items.map(item => (
-                <NFTItem {...item} onClick={() => itemClickHandler?.(item.id)} />
+                <NFTItem key={item.id} {...item} onClick={() => itemClickHandler?.(item.id)} />
             ))}
         </Grid>
     )
