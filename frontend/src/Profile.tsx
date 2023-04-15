@@ -67,16 +67,16 @@ export function Profile() {
                 {(unregisteredNftItems.length === 0 || registeredNftItems.length === 0) && <Loading />}
                 {unregisteredNftItems.length !== 0 && (
                     <Box>
-                        <Box fontWeight={"bold"} fontSize={"24px"}>
-                            Unlisted:
+                        <Box fontWeight={"bold"} fontSize={"20px"} mb="16px">
+                            UNLISTED:
                         </Box>
                         <NFTGrid itemClickHandler={handleSelect} items={unregisteredNftItems} marginBottom={4} />
                     </Box>
                 )}
                 {registeredNftItems.length !== 0 && (
                     <Box>
-                        <Box fontWeight={"bold"} fontSize={"24px"}>
-                            Listed:
+                        <Box fontWeight={"bold"} fontSize={"20px"} mb="16px">
+                            LISTED:
                         </Box>
                         <NFTGrid itemClickHandler={handleSelect} items={registeredNftItems} marginBottom={4} />
                     </Box>

@@ -2,6 +2,7 @@ import { Box, Button, Flex, Grid } from "@chakra-ui/react"
 import { Layout } from "Layout"
 import { POLY_NFT_FACTORY_ADDR } from "constants/address"
 import { useCallback, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { ipfsClient } from "services/IPFS"
 import { polyNftErc721Client } from "services/PolyNftErc721"
 import { polyNftFactoryClient } from "services/PolyNftFactory"
@@ -11,7 +12,9 @@ import { useAccount } from "wagmi"
 const PROJECT_NAME = "Cute Shark Family"
 
 export function Mint() {
+    const { projectName } = useParams()
     const { address } = useAccount()
+    const navigate = useNavigate()
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
     const [ipfsUrl, setIpfsUrl] = useState<string>("")
 
@@ -43,12 +46,13 @@ export function Mint() {
                     projectErc721Address,
                     signer,
                 )
+                navigate(`/projects/${projectName}/profile`)
             } catch (e) {
                 console.log("mint error")
                 console.error(e)
             }
         }
-    }, [address, ipfsUrl])
+    }, [address, ipfsUrl, navigate, projectName])
 
     const handleUploadImg = useCallback<React.MouseEventHandler<HTMLButtonElement>>(async () => {
         const reader = new FileReader()
