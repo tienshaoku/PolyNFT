@@ -49,5 +49,8 @@
     "typechain": "8.1.1",
     "typescript": "4.7.4"
   },
-  "homepage": "https://github.com/tienshaoku/PolyNFT#readme"
+  "homepage": "https://github.com/tienshaoku/PolyNFT#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
