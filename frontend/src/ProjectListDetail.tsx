@@ -17,9 +17,7 @@ export function ProjectListDetail() {
                 projectName!,
                 POLY_NFT_FACTORY_ADDR,
             )
-            const totalSupply = Number(
-                (await polyNftErc721Client.getTotalSupply(projectErc721Address, projectErc721Address)).toString(),
-            )
+            const totalSupply = Number((await polyNftErc721Client.getTotalSupply(projectErc721Address)).toString())
 
             const tokenInfoArray: IErc721TokenInfo[] = []
             for (let i = 0; i < totalSupply; i++) {

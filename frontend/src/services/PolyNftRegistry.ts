@@ -13,6 +13,16 @@ export interface IOrderInfo {
     description: string
 }
 
+export interface IOrderTokenInfo {
+    tokenId: Big
+    tokenURI: string
+    attribute: string
+    description: string
+    fusionSourceTokenIds: Big[]
+    polyNftErc721: string
+    fusionCost: Big
+}
+
 class PolyNftRegistryClient {
     constructor(private readonly rpcUrl: string) {}
     async getPolyNftRegistry(contractAddr: string, signer?: Signer): Promise<PolyNftRegistry> {
@@ -27,7 +37,6 @@ class PolyNftRegistryClient {
             polyNftErc721: orderInfo.polyNftErc721Address,
             tokenId: big2BigNum(orderInfo.tokenId, 0),
             fusionCost: big2BigNum(orderInfo.fusionCost, 0),
-            timestamp: big2BigNum(orderInfo.timestamp, 0),
             description: orderInfo.description,
         })
         return tx.wait()
@@ -68,18 +77,20 @@ class PolyNftRegistryClient {
         )
     }
 
-    async getOrdersByErc721(address: string, contractAddr: string, signer?: Signer): Promise<IOrderInfo[]> {
+    async getOrdersByErc721(address: string, contractAddr: string, signer?: Signer): Promise<IOrderTokenInfo[]> {
         const polyNftRegistry = await this.getPolyNftRegistry(contractAddr, signer)
-        const array = await polyNftRegistry.callStatic.getOrdersByPolyNftErc721(address)
+        const array = await polyNftRegistry.callStatic.getOrdersInfoByPolyNftErc721(address)
         return array.map(
             val =>
                 ({
-                    polyNftErc721Address: val[0],
-                    tokenId: bigNum2Big(val[1], 0),
-                    fusionCost: bigNum2Big(val[2], 0),
-                    timestamp: bigNum2Big(val[3], 0),
-                    description: val[4],
-                } as IOrderInfo),
+                    tokenId: bigNum2Big(val[0], 0),
+                    tokenURI: val[1],
+                    attribute: val[2],
+                    description: val[3],
+                    fusionSourceTokenIds: val[4].map(item => bigNum2Big(item, 0)),
+                    polyNftErc721: val[5],
+                    fusionCost: bigNum2Big(val[6], 0),
+                } as IOrderTokenInfo),
         )
     }
 
