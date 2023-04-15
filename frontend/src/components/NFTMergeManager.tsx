@@ -2,8 +2,9 @@ import {
     Box,
     Button,
     Flex,
-    Input,
+    Heading,
     Highlight,
+    Input,
     Modal,
     ModalBody,
     ModalContent,
@@ -11,16 +12,16 @@ import {
     ModalHeader,
     ModalOverlay,
     useToast,
-    Heading,
 } from "@chakra-ui/react"
+import { POLY_NFT_REGISTRY_ADDR } from "constants/address"
+import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { polyNftRegistryClient } from "services/PolyNftRegistry"
+import { getSigner } from "utils/get"
+import Box3D from "./Box3D"
 import NFTGrid from "./NFTGrid"
 import NFTItem, { NFTItemProps } from "./NFTItem"
-import { motion } from "framer-motion"
-import Box3D from "./Box3D"
-import { polyNftRegistryClient } from "services/PolyNftRegistry"
-import { POLY_NFT_REGISTRY_ADDR } from "constants/address"
 
 const FLASH_DURATION = 800
 
@@ -40,7 +41,8 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
     const toast = useToast()
 
     const [selectedItems, setSelectedItems] = useState<string[]>([])
-    const isMergeValid = selectedItems.length > 0 && selectedItems.length <= maxSelectionAmount
+    const totalPrice = items.find(i => i.id === selectedItems[0])?.orderData.fusionCost
+    // const totalPrice = selectedItems.reduce((accum, next) => accum + items.find((i) => i.id === next)., 0)
 
     const handleSelect = (id: string) => {
         if (selectedItems.includes(id)) {
@@ -64,6 +66,8 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
     const [prompt, setPrompt] = useState("")
     const handlePromptChange = (event: any) => setPrompt(event.target.value)
 
+    const isMergeValid = selectedItems.length > 0 && selectedItems.length <= maxSelectionAmount && !!prompt
+
     const [newNFTItem, setNewNFTItem] = useState<NFTItemProps>()
 
     const [uiState, setUIState] = useState(UIState.INIT)
@@ -76,6 +80,9 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
     }, [uiState])
 
     const handlerMergeClick = async () => {
+        if (!totalPrice) {
+            return
+        }
         const sourceNFTItems = items.filter(({ id }) => selectedItems.includes(id))
         console.log({ sourceNFTItems, prompt })
         setUIState(UIState.MERGING)
@@ -95,14 +102,24 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
             const selectedOrders = items
                 .filter(i => selectedItems.includes(i.orderData.tokenId.toString()))
                 .map(i => i.orderData)
-            await polyNftRegistryClient.fuse(selectedOrders, newNFTImageUri, prompt, POLY_NFT_REGISTRY_ADDR)
+
+            console.log({ selectedOrders, newNFTImageUri, prompt, POLY_NFT_REGISTRY_ADDR })
+            const signer = await getSigner()
+            await polyNftRegistryClient.fuse(
+                selectedOrders,
+                newNFTImageUri,
+                prompt,
+                POLY_NFT_REGISTRY_ADDR,
+                totalPrice,
+                signer,
+            )
             // const result = await mockAsyncFunction()
             setNewNFTItem({ id: "newNFT", imageUri: newNFTImageUri, orderData: selectedOrders[0] })
 
             setUIState(UIState.MERGED)
         } catch (error: any) {
             setUIState(UIState.INIT)
-            console.log(error.message)
+            console.log("error:", error.message)
             toast({
                 title: `Fuse new NFT failed 😭`,
                 position: "top",
@@ -126,7 +143,8 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
                 marginBottom={4}
             />
             <Input size={"lg"} marginBottom={4} placeholder="Enter mutation prompt" onChange={handlePromptChange} />
-            <Flex justifyContent={"center"}>
+            <Heading>Price: {totalPrice?.div(10 ** 18)?.toString() || 0} ETH</Heading>
+            <Flex justifyContent={"center"} mt="8px">
                 <Button size={"lg"} w="full" colorScheme="blue" onClick={handlerMergeClick} isDisabled={!isMergeValid}>
                     FUSE!
                 </Button>

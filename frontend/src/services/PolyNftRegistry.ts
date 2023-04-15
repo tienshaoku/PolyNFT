@@ -48,6 +48,7 @@ class PolyNftRegistryClient {
         tokenURI: string,
         description: string,
         contractAddr: string,
+        price: Big,
         signer?: Signer,
     ): Promise<ContractReceipt> {
         const polyNftRegistry = await this.getPolyNftRegistry(contractAddr, signer)
@@ -59,7 +60,9 @@ class PolyNftRegistryClient {
             description: val.description,
         }))
 
-        const tx = await polyNftRegistry.fuse(array, tokenURI, description)
+        const tx = await polyNftRegistry.fuse(array, tokenURI, description, {
+            value: big2BigNum(price, 0),
+        })
         return tx.wait()
     }
 
