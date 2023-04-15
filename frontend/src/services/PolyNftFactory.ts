@@ -28,6 +28,11 @@ class PolyNftFactoryClient {
         const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
         return await polyNftFactory.callStatic.getProjects()
     }
+
+    async getProjectByErc721Name(name: string, contractAddr: string, signer?: Signer): Promise<string> {
+        const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
+        return await polyNftFactory.callStatic.projectMap(name)
+    }
 }
 
 export const polyNftFactoryClient = new PolyNftFactoryClient(RPC_URL_HTTPS)
