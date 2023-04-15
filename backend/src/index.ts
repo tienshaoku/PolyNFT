@@ -3,6 +3,7 @@ import "reflect-metadata";
 
 import * as dotenv from "dotenv";
 import express from "express";
+import cors from 'cors';
 import { Container } from "typedi";
 import { Handlers } from "./handler";
 
@@ -11,6 +12,8 @@ dotenv.config()
 async function main(): Promise<void> {
     const app = express();
     const port = 3001;
+
+    app.use(cors());
     app.use(express.json());
     
     const handlers = Container.get(Handlers)

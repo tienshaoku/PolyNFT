@@ -20,7 +20,7 @@ Note: payload should be base64-encoded
 ### Request
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/upload \
+curl -X POST http://localhost:3001/api/v1/upload \
     -H "Content-Type: application/json" \
     -d '{"payload":"VGVzdFRlc3QK"}'
 ```
