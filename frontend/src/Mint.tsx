@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Grid } from "@chakra-ui/react"
-import { Header } from "Header"
+import { Layout } from "Layout"
 import { POLY_NFT_FACTORY_ADDR } from "constants/address"
 import { useCallback, useState } from "react"
 import { ipfsClient } from "services/IPFS"
@@ -68,9 +68,8 @@ export function Mint() {
         }
     }, [selectedImage])
     return (
-        <>
-            <Header />
-            <Grid bgColor="black" p="16px" pt="120px" justifyContent={"center"} alignItems={"center"} h="100vh">
+        <Layout>
+            <Grid bgColor="black" p="16px" pt="120px" justifyContent={"center"} alignItems={"center"} h="100%">
                 {!selectedImage && (
                     <Grid
                         w="350px"
@@ -108,6 +107,6 @@ export function Mint() {
                     )}
                 </Flex>
             </Grid>
-        </>
+        </Layout>
     )
 }

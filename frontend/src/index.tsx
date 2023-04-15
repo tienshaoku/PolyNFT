@@ -1,4 +1,5 @@
 import { ColorModeScript } from "@chakra-ui/react"
+import { GlobalContainer } from "containers/GlobalContainer"
 import * as React from "react"
 import * as ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
@@ -14,7 +15,9 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <ColorModeScript />
-            <App />
+            <GlobalContainer.Provider>
+                <App />
+            </GlobalContainer.Provider>
         </BrowserRouter>
     </React.StrictMode>,
 )
