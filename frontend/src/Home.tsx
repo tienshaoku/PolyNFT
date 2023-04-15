@@ -20,9 +20,9 @@ export function Home() {
         fetchProjectNames()
     })
     return (
-        <Grid bgColor={"black"} h="100vh" justifyContent={"center"} alignItems={"center"}>
-            <Grid gap="25px">
-                <Grid justifyContent={"center"}>
+        <Grid bgColor={"black"} h="100vh" justifyItems={"center"} alignItems={"center"}>
+            <Grid gap="25px" justifyItems={"center"}>
+                <Grid justifyItems={"center"}>
                     <Text fontSize="42px" color="white" fontFamily={"serif"} letterSpacing={"8px"}>
                         NFT
                     </Text>
@@ -30,7 +30,7 @@ export function Home() {
                         POLYMERIZATION
                     </Text>
                 </Grid>
-                <Image src={logo} w="500px" />
+                <Image src={logo} w="500px" alignItems={"center"} padding={"10px"} />
                 <Grid justifyContent={"center"} mt="25px">
                     {!address && <ConnectKitButton />}
                     {address && (
@@ -44,6 +44,11 @@ export function Home() {
                         </Button>
                     )}
                 </Grid>
+            </Grid>
+            <Grid justifyItems={"center"} width={"80%"}>
+                <Text fontSize="28px" color="white" fontFamily={"serif"} letterSpacing={"5px"}>
+                    Create, Fuse and Earn from NFT Derivative Works
+                </Text>
             </Grid>
         </Grid>
     )
