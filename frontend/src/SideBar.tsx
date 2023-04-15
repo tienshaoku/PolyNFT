@@ -22,9 +22,10 @@ export function SideBar() {
                     border="1px solid white"
                     borderRadius={"10px"}
                     key={i}
-                    onClick={() => i === 0 && navigate(`/project/${p}/all`)}
+                    onClick={() => i === 0 && navigate(`/projects/${p}/all`)}
                     p="12px"
                     mb="32px"
+                    color={"white"}
                     cursor={"pointer"}
                     _hover={{ boxShadow: "0 0 15px #fff" }}
                 >
