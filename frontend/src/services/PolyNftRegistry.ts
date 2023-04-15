@@ -5,7 +5,7 @@ import { ContractReceipt, Signer } from "ethers"
 import { big2BigNum, bigNum2Big } from "utils/number"
 import { PolyNftRegistry, PolyNftRegistry__factory } from "../typechain"
 
-export interface OrderInfo {
+export interface IOrderInfo {
     polyNftErc721Address: string
     tokenId: Big
     fusionCost: Big
@@ -20,7 +20,7 @@ class PolyNftRegistryClient {
         return PolyNftRegistry__factory.connect(contractAddr, signer ? signer : provider)
     }
 
-    async register(orderInfo: OrderInfo, contractAddr: string, signer?: Signer): Promise<ContractReceipt> {
+    async register(orderInfo: IOrderInfo, contractAddr: string, signer?: Signer): Promise<ContractReceipt> {
         const polyNftRegistry = await this.getPolyNftRegistry(contractAddr, signer)
 
         const tx = await polyNftRegistry.register({
@@ -34,7 +34,7 @@ class PolyNftRegistryClient {
     }
 
     async fuse(
-        orderInfos: OrderInfo[],
+        orderInfos: IOrderInfo[],
         tokenURI: string,
         description: string,
         contractAddr: string,
@@ -53,7 +53,7 @@ class PolyNftRegistryClient {
         return tx.wait()
     }
 
-    async getOrdersByOwner(address: string, contractAddr: string, signer?: Signer): Promise<OrderInfo[]> {
+    async getOrdersByOwner(address: string, contractAddr: string, signer?: Signer): Promise<IOrderInfo[]> {
         const polyNftRegistry = await this.getPolyNftRegistry(contractAddr, signer)
         const array = await polyNftRegistry.callStatic.getOrdersByOwner(address)
         return array.map(
@@ -64,11 +64,11 @@ class PolyNftRegistryClient {
                     fusionCost: bigNum2Big(val[2], 0),
                     timestamp: bigNum2Big(val[3], 0),
                     description: val[4],
-                } as OrderInfo),
+                } as IOrderInfo),
         )
     }
 
-    async getOrdersByErc721(address: string, contractAddr: string, signer?: Signer): Promise<OrderInfo[]> {
+    async getOrdersByErc721(address: string, contractAddr: string, signer?: Signer): Promise<IOrderInfo[]> {
         const polyNftRegistry = await this.getPolyNftRegistry(contractAddr, signer)
         const array = await polyNftRegistry.callStatic.getOrdersByPolyNftErc721(address)
         return array.map(
@@ -79,7 +79,7 @@ class PolyNftRegistryClient {
                     fusionCost: bigNum2Big(val[2], 0),
                     timestamp: bigNum2Big(val[3], 0),
                     description: val[4],
-                } as OrderInfo),
+                } as IOrderInfo),
         )
     }
 
