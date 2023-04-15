@@ -18,6 +18,7 @@ async function main(): Promise<void> {
     
     const handlers = Container.get(Handlers)
     app.post('/api/v1/upload', handlers.upload.bind(handlers));
+    app.post('/api/v1/fuse', handlers.fuse.bind(handlers));
     
     app.listen(port, () => {
       console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
