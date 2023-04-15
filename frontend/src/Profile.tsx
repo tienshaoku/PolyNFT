@@ -40,6 +40,7 @@ export function Profile() {
                             imageUri: v.tokenURI,
                             imageDescription: v.description,
                         },
+                        showButton: true,
                         isListed: false,
                     })),
                 )
@@ -50,6 +51,7 @@ export function Profile() {
                             imageUri: _registeredNftItemsUri[i],
                             imageDescription: v.description,
                         },
+                        showButton: true,
                         isListed: true,
                     })),
                 )
