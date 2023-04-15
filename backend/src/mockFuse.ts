@@ -18,6 +18,9 @@ export class MockFuseService {
 
     async _readFile(list: string[], prompt: string): Promise<Buffer>{
         const sourceCID = path.parse(list[0]).base;
+        if (!prompt){
+           throw new Error("Missing prompt");
+        }
         const keyword = prompt.split(" ")[0];
         let imagePath = path.join(this._IMG_FOLDER, sourceCID, `${keyword}.png`);
         if (!this._checkFileExists(imagePath)){
