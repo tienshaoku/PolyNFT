@@ -2,16 +2,15 @@
 import "reflect-metadata";
 
 import * as dotenv from "dotenv";
-import fetch, { Headers } from "node-fetch"
-import express, { Request, Response } from "express";
-import { Container } from "typedi"
+import express from "express";
+import { Container } from "typedi";
 import { Handlers } from "./handler";
 
 dotenv.config()
 
 async function main(): Promise<void> {
     const app = express();
-    const port = 3000;
+    const port = 3001;
     app.use(express.json());
     
     const handlers = Container.get(Handlers)
