@@ -20,7 +20,7 @@ export function ProjectList() {
     return (
         <>
             <Header />
-            <Grid bgColor="black" h="calc(100vh - 80px)" p="24px" color="white" templateColumns={"1fr 1fr 1fr"}>
+            <Grid bgColor="black" h="calc(100vh - 80px)" p="24px" color="white" templateColumns={"repeat(5, 1fr)"}>
                 {projects.map((name: string, index: number) => (
                     <Grid justifyContent="center" key={index}>
                         <Button onClick={() => navigate(`/project/${name}`)}>{name}</Button>

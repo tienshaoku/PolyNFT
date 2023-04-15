@@ -1,9 +1,17 @@
 import { Box, Button, Flex, Grid } from "@chakra-ui/react"
 import { Header } from "Header"
+import { POLY_NFT_FACTORY_ADDR } from "constants/address"
 import { useCallback, useState } from "react"
 import { ipfsClient } from "services/IPFS"
+import { polyNftErc721Client } from "services/PolyNftErc721"
+import { polyNftFactoryClient } from "services/PolyNftFactory"
+import { getSigner } from "utils/get"
+import { useAccount } from "wagmi"
+
+const PROJECT_NAME = "Cute Shark Family"
 
 export function Mint() {
+    const { address } = useAccount()
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
     const [ipfsUrl, setIpfsUrl] = useState<string>("")
 
@@ -18,7 +26,29 @@ export function Mint() {
         setSelectedImage(null)
     }, [])
 
-    const handleMint = useCallback(async () => {}, [])
+    const handleMint = useCallback(async () => {
+        if (address && ipfsUrl) {
+            try {
+                const projectErc721Address = await polyNftFactoryClient.getProjectErc721ByName(
+                    PROJECT_NAME,
+                    POLY_NFT_FACTORY_ADDR,
+                )
+                const signer = await getSigner()
+                // TODO: dynamic description
+                await polyNftErc721Client.mint(
+                    address,
+                    ipfsUrl,
+                    "0x",
+                    "Shark drink coffee",
+                    projectErc721Address,
+                    signer,
+                )
+            } catch (e) {
+                console.log("mint error")
+                console.error(e)
+            }
+        }
+    }, [address, ipfsUrl])
 
     const handleUploadImg = useCallback<React.MouseEventHandler<HTMLButtonElement>>(async () => {
         const reader = new FileReader()

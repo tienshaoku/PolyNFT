@@ -36,7 +36,7 @@ export function ProjectListDetail() {
     return (
         <>
             <Header />
-            <Grid bgColor="black" h="calc(100vh - 80px)" p="24px" color="white" templateColumns={"repeat(5, 1fr)"}>
+            <Grid bgColor="black" h="calc(100vh - 80px)" p="24px" color="white">
                 {tokenInfos.map((info, index) => (
                     <Box key={index}>
                         {info.description}

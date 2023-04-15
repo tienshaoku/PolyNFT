@@ -1,6 +1,6 @@
-import { JsonRpcProvider, getNetwork } from "@ethersproject/providers"
+import { JsonRpcProvider } from "@ethersproject/providers"
 import Big from "big.js"
-import { RPC_URL_HTTPS } from "constants/env"
+import { CHAIN_ID, RPC_URL_HTTPS } from "constants/env"
 import { ContractReceipt, Signer } from "ethers"
 import { big2BigNum, bigNum2Big } from "utils/number"
 import { PolyNftErc721, PolyNftErc721__factory } from "../typechain"
@@ -16,7 +16,7 @@ export interface IErc721TokenInfo {
 class PolyNftErc721Client {
     constructor(private readonly rpcUrl: string) {}
     async getPolyNftErc721(contractAddr: string, signer?: Signer): Promise<PolyNftErc721> {
-        const provider = new JsonRpcProvider(this.rpcUrl, getNetwork("optimism-goerli"))
+        const provider = new JsonRpcProvider(this.rpcUrl, CHAIN_ID)
         return PolyNftErc721__factory.connect(contractAddr, signer ? signer : provider)
     }
 

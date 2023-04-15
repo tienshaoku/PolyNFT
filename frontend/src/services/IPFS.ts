@@ -1,5 +1,5 @@
 import { API_UPLOAD_IMG } from "constants/api"
-import { getBase64StringFromDataURL } from "utils"
+import { getBase64StringFromDataURL } from "utils/get"
 
 class IPFSClient {
     async uploadFile(reader: FileReader) {

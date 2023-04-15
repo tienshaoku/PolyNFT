@@ -1,12 +1,12 @@
-import { JsonRpcProvider, getNetwork } from "@ethersproject/providers"
-import { RPC_URL_HTTPS } from "constants/env"
+import { JsonRpcProvider } from "@ethersproject/providers"
+import { CHAIN_ID, RPC_URL_HTTPS } from "constants/env"
 import { ContractReceipt, Signer, ethers } from "ethers"
 import { PolyNftFactory, PolyNftFactory__factory } from "../typechain"
 
 class PolyNftFactoryClient {
     constructor(private readonly rpcUrl: string) {}
     async getPolyNftFactory(contractAddr: string, signer?: Signer): Promise<PolyNftFactory> {
-        const provider = new JsonRpcProvider(this.rpcUrl, getNetwork("optimism-goerli"))
+        const provider = new JsonRpcProvider(this.rpcUrl, CHAIN_ID)
         return PolyNftFactory__factory.connect(contractAddr, signer ? signer : provider)
     }
 
