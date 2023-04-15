@@ -84,7 +84,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 1, projectName }: Props) 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    urlList: selectedItems,
+                    urlList: sourceNFTItems.map(i => i.imageUri),
                     prompt,
                 }),
             })

@@ -8,7 +8,7 @@ interface Props extends GridProps {
 
 const NFTGrid = ({ items, itemClickHandler, ...props }: Props) => {
     return (
-        <Grid templateColumns="repeat(4, 1fr)" gap={6} {...props}>
+        <Grid templateColumns="repeat(3, 1fr)" gap={4} {...props}>
             {items.map(item => (
                 <NFTItem key={item.id} {...item} onClick={() => itemClickHandler?.(item.id)} />
             ))}
