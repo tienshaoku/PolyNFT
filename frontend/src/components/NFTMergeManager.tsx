@@ -84,7 +84,7 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
 
     const handlerMergeClick = async () => {
         const sourceNFTItems = items.filter(({ id }) => selectedItems.includes(id))
-        console.log(sourceNFTItems)
+        console.log({ sourceNFTItems, prompt })
         setUIState(UIState.MERGING)
         try {
             const fusedResult = await fetch("http://localhost:3001/api/v1/fuse/upload", {

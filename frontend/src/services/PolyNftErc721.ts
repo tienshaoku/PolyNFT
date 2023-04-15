@@ -103,7 +103,7 @@ class PolyNftErc721Client {
 
     async getAllTokensInfo(contractAddr: string, signer?: Signer): Promise<IErc721TokenInfo[]> {
         const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
-        const rawAllTokensInfo = await polyNftErc721.callStatic.getAllTokensIndo()
+        const rawAllTokensInfo = await polyNftErc721.callStatic.getAllTokensInfo()
         return rawAllTokensInfo.map(info => ({
             tokenId: info.tokenId.toString(),
             tokenURI: info.tokenURI,
