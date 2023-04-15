@@ -3,13 +3,6 @@ import { Header } from "Header"
 import { NFTItemProps } from "components/NFTItem"
 import NFTMergeManager from "components/NFTMergeManager"
 export function Merge() {
-    const handleUnboxSuccess = (newItem: NFTItemProps) => {
-        // TODO: hide grid
-        // TODO: switch background theme to dark
-        // TODO: render shaking box
-        console.log("hey")
-    }
-
     return (
         <>
             <Header />
@@ -34,7 +27,6 @@ export function Merge() {
                         { id: "10" },
                         { id: "11" },
                     ]}
-                    onUnboxSuccess={handleUnboxSuccess}
                 />
             </Container>
         </>

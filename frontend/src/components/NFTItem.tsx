@@ -11,7 +11,7 @@ export interface NFTItemProps extends GridItemProps {
 
 const NFTItem = ({ id, selected, ...props }: NFTItemProps) => {
     return (
-        <GridItem {...props} w="100%" border={selected ? "4px purple solid" : ""} borderRadius={8} padding={1}>
+        <GridItem w="100%" border={selected ? "4px purple solid" : ""} borderRadius={8} padding={1} {...props}>
             <AspectRatio ratio={1}>
                 <Box bg="pink.500">{/* Render NFT image here */}</Box>
             </AspectRatio>
