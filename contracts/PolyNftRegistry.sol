@@ -83,7 +83,7 @@ contract PolyNftRegistry is Ownable {
     // will call fuse() of implementation address
     function fuse(
         OrderInfo[] calldata orderInfosArg,
-        bytes calldata tokenURI,
+        string calldata tokenURI,
         string calldata description
     ) external payable {
         uint256 orderInfoLength = orderInfosArg.length;
