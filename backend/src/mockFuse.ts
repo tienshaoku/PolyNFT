@@ -10,11 +10,10 @@ export class MockFuseService {
     private readonly _IMG_FOLDER = "images"
     private readonly _DEFAULT_IMG = "other.png"
 
-    constructor(readonly ipfsService: IPFSService) {}
+    constructor() {}
     
-    async fuse(list: string[], prompt: string): Promise<string>{
-        const fileContent =  await this._readFile(list,  prompt);
-        return this.ipfsService.uploadFromPayload(fileContent);
+    async fuse(list: string[], prompt: string): Promise<Buffer>{
+        return  await this._readFile(list,  prompt);
     }
 
     async _readFile(list: string[], prompt: string): Promise<Buffer>{

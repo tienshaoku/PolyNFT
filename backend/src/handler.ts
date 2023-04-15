@@ -18,6 +18,10 @@ interface RequestFuse {
     prompt: string
 };
 
+interface ResponseFuse {
+    payload: string // base64 encoding
+};
+
 @Service()
 export class Handlers {
     
@@ -39,7 +43,23 @@ export class Handlers {
     async fuse(req: Request, res: Response){
         try {
             const data: RequestFuse = req.body;
-            const url = await this.mockFuseService.fuse(data.urlList, data.prompt)
+            const payload = await this.mockFuseService.fuse(data.urlList, data.prompt)
+            const RespondUpload: ResponseFuse= {
+                payload: this._encode(payload),
+            };
+            res.json(RespondUpload);
+        } catch (e:any) {
+            res.status(500).send(e.message);
+        }
+    }
+
+
+
+    async fuseAndUpload(req: Request, res: Response){
+        try {
+            const data: RequestFuse = req.body;
+            const payload = await this.mockFuseService.fuse(data.urlList, data.prompt)
+            const url = await this.ipfsService.uploadFromPayload(payload)
             const RespondUpload: RespondUpload= {
                 ipfs: url
             };
@@ -50,4 +70,5 @@ export class Handlers {
     }
 
    private _decode = (str: string):Buffer => Buffer.from(str, 'base64');
+   private _encode = (buffer: Buffer):string => buffer.toString('base64');
 }
