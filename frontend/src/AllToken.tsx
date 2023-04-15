@@ -14,7 +14,9 @@ export function AllToken() {
     useEffect(() => {
         async function init() {
             const tokenAddress = await polyNftFactoryClient.getProjectErc721ByName(projectName!, POLY_NFT_FACTORY_ADDR)
+            console.log("debug:", "tokenAddress:", tokenAddress)
             const tokenInfos = await polyNftErc721Client.getAllTokensInfo(tokenAddress)
+            console.log("debug:", "tokenInfos:", tokenInfos)
             setTokenInfos(tokenInfos)
         }
         init()
@@ -26,10 +28,14 @@ export function AllToken() {
             {tokenInfos.length !== 0 && (
                 <Flex flexWrap={"wrap"} gap="32px">
                     {tokenInfos.map((info, index) => (
-                        <Box key={index}>
-                            <Box fontWeight={"bold"}>ID: {info.tokenId}</Box>
+                        <Box key={index} w="400px" border="1px solid" borderRadius={"12px"} p={"16px"}>
+                            <Box fontWeight={"bold"} mb="8px">
+                                ID: {info.tokenId}
+                            </Box>
                             <Image src={info.tokenURI} w="350px" h="350px" />
-                            <Box color="gray">{info.description}</Box>
+                            <Box mt="8px" color="gray">
+                                {info.description}
+                            </Box>
                         </Box>
                     ))}
                 </Flex>
