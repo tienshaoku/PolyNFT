@@ -4,19 +4,18 @@ import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IPolyNftErc721, IERC721 } from "./interface/IPolyNftErc721.sol";
 import { IPolyNftFusionImp } from "./interface/IPolyNftFusionImp.sol";
 
-// default price is in ETH
 contract PolyNftRegistry is Ownable {
+    /// @param fusionCost default in ETH
     struct OrderInfo {
         address polyNftErc721;
         uint256 tokenId;
-        uint256 price;
+        uint256 fusionCost;
         uint256 timestamp;
-        string prompt;
+        string description;
     }
 
-    // fee ratio to platform
+    // fee ratio of platform
     uint24 internal constant _FEE_RATIO = 0.01e6; // 1% in decimal 6
-
 
     mapping(address => OrderInfo[]) public polyNftErc721OrderMap;
     mapping(address => OrderInfo[]) public orderMap;
@@ -37,14 +36,14 @@ contract PolyNftRegistry is Ownable {
     // deregister
     function deregister(OrderInfo calldata orderInfoArg) external {}
 
-    // will call fustion() of implementation address
-    function fusion(OrderInfo[] calldata orderInfosArg, string calldata prompt) external payable {
+    // will call fuse() of implementation address
+    function fuse(OrderInfo[] calldata orderInfosArg, string calldata description) external payable {
         uint256 orderInfoLength = orderInfosArg.length;
-        uint256 totalPrice;
+        uint256 totalFusionCost;
         bytes[] memory attributes = new bytes[](orderInfoLength);
 
         for (uint256 i = 0; i < orderInfoLength; ++i) {
-            totalPrice += orderInfosArg[i].price;
+            totalFusionCost += orderInfosArg[i].fusionCost;
             attributes[i] = IPolyNftErc721(orderInfosArg[i].polyNftErc721).getTokenAttribute(orderInfosArg[i].tokenId);
             payable(
                 orderInfoHashMap[
@@ -52,7 +51,7 @@ contract PolyNftRegistry is Ownable {
                         abi.encodePacked(orderInfosArg[i].polyNftErc721, orderInfosArg[i].tokenId, block.timestamp)
                     )
                 ]
-            ).transfer((orderInfosArg[i].price * (1e6 - _FEE_RATIO)) / 1e6);
+            ).transfer((orderInfosArg[i].fusionCost * (1e6 - _FEE_RATIO)) / 1e6);
 
             // check all of the polyNftErc721 is the same
             if (i > 0) {
@@ -61,15 +60,15 @@ contract PolyNftRegistry is Ownable {
             }
         }
 
-        // PNR_NEP: not enoungh price
-        require(msg.value >= totalPrice, "PNR_NEP");
+        // PNR_NEP: not enoungh fusionCost
+        require(msg.value >= totalFusionCost, "PNR_NEP");
 
         // call the implemnation address
         address polyNftErc721 = orderInfosArg[0].polyNftErc721;
-        address fusionImp = IPolyNftErc721(polyNftErc721).getFustionImplentation();
-        bytes memory fusionAttribute = IPolyNftFusionImp(fusionImp).fusion(attributes);
+        address fusionImp = IPolyNftErc721(polyNftErc721).getFusionImplementation();
+        bytes memory fusionAttribute = IPolyNftFusionImp(fusionImp).fuse(attributes);
 
         // mint fusion NFT
-        IPolyNftErc721(polyNftErc721).mint(msg.sender, fusionAttribute, prompt);
+        IPolyNftErc721(polyNftErc721).mint(msg.sender, fusionAttribute, description);
     }
 }

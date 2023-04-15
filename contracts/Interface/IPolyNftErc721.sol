@@ -7,5 +7,5 @@ interface IPolyNftErc721 is IERC721 {
 
     function getTokenAttribute(uint256 tokenId) external view returns (bytes memory);
 
-    function getFustionImplentation() external view returns (address);
+    function getFusionImplementation() external view returns (address);
 }
