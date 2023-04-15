@@ -4,6 +4,8 @@ dotenv.config()
 import "@typechain/hardhat"
 import "hardhat-contract-sizer"
 import "hardhat-dependency-compiler"
+import "hardhat-deploy"
+import "@nomiclabs/hardhat-ethers"
 import { HardhatUserConfig } from "hardhat/config"
 
 const config: HardhatUserConfig = {
@@ -24,6 +26,13 @@ const config: HardhatUserConfig = {
         localhost: {
             allowUnlimitedContractSize: true,
         },
+        optimismGoerli: {
+            url: process.env.OPTIMISM_GOERLI_WEB3_ENDPOINT,
+            accounts: [process.env.POLY_NFT_DEPLOYER]
+        }
+    },
+    namedAccounts: {
+        polyNftDeployer: "0xf0d342903C88CFfFf0f4c0934520F1bf86C7b2e6"
     },
     contractSizer: {
         // max bytecode size is 24.576 KB
