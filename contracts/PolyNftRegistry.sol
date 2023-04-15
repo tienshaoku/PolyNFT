@@ -16,6 +16,7 @@ contract PolyNftRegistry is Ownable {
 
     // fee ratio of platform
     uint24 internal constant _FEE_RATIO = 0.01e6; // 1% in decimal 6
+    uint24 internal constant _MAX_FUSE_AMOUNT = 10; // TODO: need to add set function (onlyOwner)
 
     mapping(address => OrderInfo[]) public polyNftErc721OrderMap;
     mapping(address => OrderInfo[]) public orderMap;
@@ -39,6 +40,10 @@ contract PolyNftRegistry is Ownable {
     // will call fuse() of implementation address
     function fuse(OrderInfo[] calldata orderInfosArg, string calldata description) external payable {
         uint256 orderInfoLength = orderInfosArg.length;
+
+        // PNR_TMO: too much orders
+        require(orderInfoLength <= _MAX_FUSE_AMOUNT, "PNR_TMO");
+
         uint256 totalFusionCost;
         bytes[] memory attributes = new bytes[](orderInfoLength);
 
@@ -67,7 +72,7 @@ contract PolyNftRegistry is Ownable {
         address polyNftErc721 = orderInfosArg[0].polyNftErc721;
         address fusionImp = IPolyNftErc721(polyNftErc721).getFusionImplementation();
         bytes memory fusionAttribute;
-        
+
         if (fusionImp != address(0)) {
             fusionAttribute = IPolyNftFusionImp(fusionImp).fuse(attributes);
         }

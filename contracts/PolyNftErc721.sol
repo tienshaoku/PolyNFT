@@ -1,6 +1,6 @@
 pragma solidity 0.8.1;
 
-import { ERC721PresetMinterPauserAutoId } from "@openzeppelin/contracts/token/ERC721/presets/ERC721PresetMinterPauserAutoId.sol";
+import { ERC721PresetMinterPauserAutoId } from "./ERC721PresetMinterPauserAutoId.sol";
 import { PolyNftFactory } from "./PolyNftFactory.sol";
 
 contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
@@ -28,13 +28,10 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         registry = PolyNftFactory(factory).registry();
     }
 
-    function mint(address to, string memory tokenURI, bytes memory attribute, string memory description) external  {
         // TODO: add access control, owner, registry or everyone
+    function mint(address to, string memory tokenURI, bytes memory attribute, string memory description) external  {
 
-        mint(to);
-
-        // sub 1 cuz totalSupply() is already incremented by 1 in the above mint()
-        uint256 tokenId = totalSupply() - 1;
+        uint256 tokenId =  mint(to);
         
         _tokenURIMap[tokenId] = tokenURI;
         attributeMap[tokenId] = attribute;
