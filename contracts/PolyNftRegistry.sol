@@ -16,6 +16,7 @@ contract PolyNftRegistry is Ownable {
 
     // fee ratio of platform
     uint24 internal constant _FEE_RATIO = 0.01e6; // 1% in decimal 6
+    uint24 internal constant _MAX_FUSE_AMOUNT = 10; // TODO: need to add set function (onlyOwner)
 
     mapping(address => OrderInfo[]) public polyNftErc721OrderMap;
     mapping(address => OrderInfo[]) public orderMap;
@@ -37,14 +38,24 @@ contract PolyNftRegistry is Ownable {
     function deregister(OrderInfo calldata orderInfoArg) external {}
 
     // will call fuse() of implementation address
-    function fuse(OrderInfo[] calldata orderInfosArg, string calldata description) external payable {
+    function fuse(
+        OrderInfo[] calldata orderInfosArg,
+        bytes calldata tokenURI,
+        string calldata description
+    ) external payable {
         uint256 orderInfoLength = orderInfosArg.length;
+
+        // PNR_TMO: too much orders
+        require(orderInfoLength <= _MAX_FUSE_AMOUNT, "PNR_TMO");
+
         uint256 totalFusionCost;
         bytes[] memory attributes = new bytes[](orderInfoLength);
+        uint256[] memory sourceTokenIds = new uint256[](orderInfoLength);
 
         for (uint256 i = 0; i < orderInfoLength; ++i) {
             totalFusionCost += orderInfosArg[i].fusionCost;
             attributes[i] = IPolyNftErc721(orderInfosArg[i].polyNftErc721).getTokenAttribute(orderInfosArg[i].tokenId);
+            sourceTokenIds[i] = orderInfosArg[i].tokenId;
             payable(
                 orderInfoHashMap[
                     keccak256(
@@ -67,12 +78,12 @@ contract PolyNftRegistry is Ownable {
         address polyNftErc721 = orderInfosArg[0].polyNftErc721;
         address fusionImp = IPolyNftErc721(polyNftErc721).getFusionImplementation();
         bytes memory fusionAttribute;
-        
+
         if (fusionImp != address(0)) {
             fusionAttribute = IPolyNftFusionImp(fusionImp).fuse(attributes);
         }
 
         // mint fusion NFT
-        IPolyNftErc721(polyNftErc721).mint(msg.sender, fusionAttribute, description);
+        IPolyNftErc721(polyNftErc721).mint(msg.sender, tokenURI, fusionAttribute, description, sourceTokenIds);
     }
 }

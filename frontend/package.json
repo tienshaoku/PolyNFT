@@ -6,6 +6,7 @@
         "@chakra-ui/react": "^2.5.5",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
+        "@ethersproject/providers": "^5.7.2",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^14.4.3",
@@ -30,11 +31,12 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "react-app-rewired start",
+        "start": "npm run typechain &&  react-app-rewired start",
         "build": "react-app-rewired build",
         "test": "react-app-rewired test",
         "eject": "react-app-rewired eject",
-        "typechain": "typechain --target ethers-v5 --out-dir ./src/typechain ./abi/*.json"
+        "copy-abi": "cp ../artifacts/contracts/PolyNftErc721.sol/PolyNftErc721.json ./abi && cp ../artifacts/contracts/PolyNftFactory.sol/PolyNftFactory.json ./abi && cp ../artifacts/contracts/PolyNftRegistry.sol/PolyNftRegistry.json ./abi",
+        "typechain": "npm run copy-abi && typechain --target ethers-v5 --out-dir ./src/typechain ./abi/*.json"
     },
     "eslintConfig": {
         "extends": "react-app"

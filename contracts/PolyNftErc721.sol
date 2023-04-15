@@ -1,6 +1,6 @@
 pragma solidity 0.8.1;
 
-import { ERC721PresetMinterPauserAutoId } from "@openzeppelin/contracts/token/ERC721/presets/ERC721PresetMinterPauserAutoId.sol";
+import { ERC721PresetMinterPauserAutoId } from "./ERC721PresetMinterPauserAutoId.sol";
 import { PolyNftFactory } from "./PolyNftFactory.sol";
 
 contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
@@ -10,6 +10,10 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
     mapping(uint256 => string) private _tokenURIMap;
     mapping(uint256 => bytes) public attributeMap;
     mapping(uint256 => string) public descriptionMap;
+
+    // key: tokneId, value: source tokneId
+    // original mint is empty array, will set source tokenId when PolyNftRegistry.fuse()
+    mapping(uint256 => uint256[]) public sourceTokenIdMap;
 
     modifier onlyRegistry() {
         // PNE721_OR: PolyNftErc721 only regitry
@@ -28,21 +32,23 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         registry = PolyNftFactory(factory).registry();
     }
 
-    function mint(address to, string memory tokenURI, bytes memory attribute, string memory description) external  {
-        // TODO: add access control, owner, registry or everyone
+    // TODO: add access control, owner, registry or everyone
+    function mint(
+        address to,
+        string memory tokenURI,
+        bytes memory attribute,
+        string memory description,
+        uint256[] memory sourceTokenIds
+    ) external {
+        uint256 tokenId = mint(to);
 
-        mint(to);
-
-        // sub 1 cuz totalSupply() is already incremented by 1 in the above mint()
-        uint256 tokenId = totalSupply() - 1;
-        
         _tokenURIMap[tokenId] = tokenURI;
         attributeMap[tokenId] = attribute;
         descriptionMap[tokenId] = description;
+        sourceTokenIdMap[tokenId] = sourceTokenIds;
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         return bytes(_tokenURIMap[tokenId]).length > 0 ? _tokenURIMap[tokenId] : _baseURI();
     }
-
 }

@@ -1,7 +1,7 @@
 import { getDefaultClient } from "connectkit"
 import { RPC_URL_HTTPS } from "constants/env"
 import { configureChains, createClient } from "wagmi"
-import { optimism, optimismGoerli } from "wagmi/chains"
+import { optimismGoerli } from "wagmi/chains"
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 
 class Wagmi {
@@ -9,7 +9,7 @@ class Wagmi {
 
     getClient() {
         const { chains, provider, webSocketProvider } = configureChains(
-            [optimism, optimismGoerli],
+            [optimismGoerli],
             [
                 jsonRpcProvider({
                     rpc: () => ({

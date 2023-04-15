@@ -1,10 +1,11 @@
-import { ChakraProvider, List, theme } from "@chakra-ui/react"
+import { ChakraProvider, theme } from "@chakra-ui/react"
 
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Home } from "./Home"
 
-import { Merge } from "Merge"
 import { Mint } from "Mint"
+import { MyList } from "MyList"
+import { Poly } from "Poly"
 import { ConnectKitProvider } from "connectkit"
 import { WagmiConfig } from "wagmi"
 import { wagmi } from "./services/Wagmi"
@@ -17,9 +18,9 @@ export const App = () => (
             <ConnectKitProvider>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/mint" element={<Mint />} />
-                    <Route path="/list" element={<List />} />
-                    <Route path="/merge" element={<Merge />} />
+                    <Route path="/mint/*" element={<Mint />} />
+                    <Route path="/list/*" element={<MyList />} />
+                    <Route path="/poly/*" element={<Poly />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </ConnectKitProvider>
