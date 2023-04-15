@@ -2,7 +2,7 @@ import {
     Box,
     Button,
     Flex,
-    Image,
+    Input,
     Highlight,
     Modal,
     ModalBody,
@@ -11,6 +11,7 @@ import {
     ModalHeader,
     ModalOverlay,
     useToast,
+    Heading,
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -18,7 +19,6 @@ import NFTGrid from "./NFTGrid"
 import NFTItem, { NFTItemProps } from "./NFTItem"
 import { motion } from "framer-motion"
 import Box3D from "./Box3D"
-import glow from "../assets/glow.png"
 
 function mockAsyncFunction() {
     return new Promise(resolve => {
@@ -68,6 +68,11 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
         }
     }
 
+    const [prompt, setPrompt] = useState("")
+    const handlePromptChange = (event: any) => setPrompt(event.target.value)
+
+    const [newNFTItem, setNewNFTItem] = useState<NFTItemProps>()
+
     const [uiState, setUIState] = useState(UIState.INIT)
     const [flashShowed, setFlashShowed] = useState(false)
     useEffect(() => {
@@ -82,11 +87,23 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
         console.log(sourceNFTItems)
         setUIState(UIState.MERGING)
         try {
-            // TODO: call image generator
-            // TODO: receive image base64
-            // TODO: call IPFS uploader backend, receive uri
+            const newImageResult = await fetch("http://localhost:3001/api/v1/fuse", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    urlList: ["https://ipfs.io/ipfs/QmbPbq16xF4PsowtbSDKa4qcWFManZAnvYbfxhjMPgZ8Jw"],
+                    // TODO: add prompt
+                }),
+            })
+            const { ipfs: newNFTImageUri } = await newImageResult.json()
+            console.log(newNFTImageUri)
+
             // TODO: call contract fuse(new img uri, description, data)
             const result = await mockAsyncFunction()
+            setNewNFTItem({ id: "newNFT", data: { imageUri: newNFTImageUri, imageDescription: prompt } })
+
             // TODO: display unboxed new NFT!
             setUIState(UIState.MERGED)
         } catch (error) {
@@ -113,9 +130,10 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
                 items={items.map(item => ({ ...item, selected: selectedItems.includes(item.id) }))}
                 marginBottom={4}
             />
+            <Input size={"lg"} marginBottom={4} placeholder="Enter mutation prompt" onChange={handlePromptChange} />
             <Flex justifyContent={"center"}>
                 <Button size={"lg"} w="full" colorScheme="blue" onClick={handlerMergeClick} isDisabled={!isMergeValid}>
-                    Merge!
+                    FUSE!
                 </Button>
             </Flex>
 
@@ -176,20 +194,12 @@ const NFTMergeManager = ({ items, maxSelectionAmount = 3 }: Props) => {
                                 />
                             )}
 
-                            {uiState === UIState.MERGED && flashShowed && (
-                                <Box w={"50%"}>
-                                    <NFTItem id="mockId" />
-                                    {/* <Image
-                                        src={glow}
-                                        style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            width: "50%",
-                                        }}
-                                    /> */}
+                            {uiState === UIState.MERGED && flashShowed && newNFTItem && (
+                                <Box w={"40%"} maxWidth={"500px"}>
+                                    <NFTItem {...newNFTItem} />
+                                    <Heading mt={4} size={"md"} textAlign={"center"}>
+                                        {newNFTItem?.data?.imageDescription}
+                                    </Heading>
                                 </Box>
                             )}
                         </Flex>
