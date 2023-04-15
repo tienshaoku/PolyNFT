@@ -1,23 +1,26 @@
-pragma solidity 0.8.18;
+pragma solidity 0.8.1;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { PolyNftErc721 } from "./PolyNftErc721.sol";
 
 contract PolyNftFactory is Ownable {
-    address private _registry;
+    address public registry;
+    mapping(address => address) public erc721Owner;
 
-    constructor(address registry) {
-        _registry = registry;
+    constructor(address registryArg) {
+        registry = registryArg;
     }
 
     function create(
-        string calldata nameArg,
-        string calldata symbalArg,
-        string calldata baseTokenURI,
-        address fustionImplentation
+        string calldata name,
+        string calldata symbol,
+        string calldata tokenURI,
+        address fusionImplementation
     ) external returns (address) {
-        PolyNftErc721 polyNftErc721 = new PolyNftErc721(nameArg, symbalArg, baseTokenURI, fustionImplentation, _registry);
+        PolyNftErc721 erc721 = new PolyNftErc721(name, symbol, tokenURI, fusionImplementation);
+        address erc721Addr = address(erc721);
+        erc721Owner[erc721Addr] = msg.sender;
 
-        return address(polyNftErc721);
+        return erc721Addr;
     }
 }

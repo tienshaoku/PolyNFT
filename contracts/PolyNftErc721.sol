@@ -1,12 +1,15 @@
-pragma solidity 0.8.18;
+pragma solidity 0.8.1;
 
 import { ERC721PresetMinterPauserAutoId } from "@openzeppelin/contracts/token/ERC721/presets/ERC721PresetMinterPauserAutoId.sol";
+import { PolyNftFactory } from "./PolyNftFactory.sol";
 
 contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
+    address public factory;
     address public registry;
     address public fusionImplementation;
+    mapping(uint256 => string) private _tokenURIMap;
     mapping(uint256 => bytes) public attributeMap;
-    mapping(uint256 => string) public tokenUrlMap;
+    mapping(uint256 => string) public descriptionMap;
 
     modifier onlyRegistry() {
         // PNE721_OR: PolyNftErc721 only regitry
@@ -18,29 +21,28 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         string memory nameArg,
         string memory symbolArg,
         string memory baseTokenURIArg,
-        address fusionImplementationArg,
-        address registryArg
+        address fusionImplementationArg
     ) ERC721PresetMinterPauserAutoId(nameArg, symbolArg, baseTokenURIArg) {
         fusionImplementation = fusionImplementationArg;
-        registry = registryArg;
+        factory = msg.sender;
+        registry = PolyNftFactory(factory).registry();
     }
 
-    // this function will be triggered after PolyNftRegistr.fustion()
-    function setTokenURI(uint256 tokneIdArg, string calldata tokenURIArg) external onlyRegistry {
-        tokenUrlMap[tokneIdArg] = tokenURIArg;
-    }
+    function mint(address to, string calldata tokenURI, bytes calldata attribute, string memory description) external  {
+        // TODO: add access control, owner, registry or everyone
 
-    // this function will be triggered after PolyNftRegistr.fustion()
-    function setTokenAttribute(uint256 tokneIdArg, bytes calldata attributeArg) external onlyRegistry {
-        attributeMap[tokneIdArg] = attributeArg;
-    }
+        mint(to);
 
-    function getTokenAttribute(uint256 tokenId) external view returns (bytes memory) {
-        return attributeMap[tokenId];
+        // sub 1 cuz totalSupply() is already incremented by 1 in the above mint()
+        uint256 tokenId = totalSupply() - 1;
+        
+        _tokenURIMap[tokenId] = tokenURI;
+        attributeMap[tokenId] = attribute;
+        descriptionMap[tokenId] = description;
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        return bytes(tokenUrlMap[tokenId]).length > 0 ? tokenUrlMap[tokenId] : _baseURI();
+        return bytes(_tokenURIMap[tokenId]).length > 0 ? _tokenURIMap[tokenId] : _baseURI();
     }
 
 }

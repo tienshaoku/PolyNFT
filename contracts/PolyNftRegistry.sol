@@ -1,4 +1,4 @@
-pragma solidity 0.8.18;
+pragma solidity 0.8.1;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IPolyNftErc721, IERC721 } from "./interface/IPolyNftErc721.sol";
