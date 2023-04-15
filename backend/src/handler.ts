@@ -15,6 +15,7 @@ interface RespondUpload {
 
 interface RequestFuse {
     urlList: string[]
+    prompt: string
 };
 
 @Service()
@@ -38,7 +39,7 @@ export class Handlers {
     async fuse(req: Request, res: Response){
         try {
             const data: RequestFuse = req.body;
-            const url = await this.mockFuseService.fuse(data.urlList)
+            const url = await this.mockFuseService.fuse(data.urlList, data.prompt)
             const RespondUpload: RespondUpload= {
                 ipfs: url
             };
