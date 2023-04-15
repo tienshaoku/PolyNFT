@@ -1,8 +1,8 @@
 pragma solidity 0.8.1;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { IPolyNftErc721, IERC721 } from "./interface/IPolyNftErc721.sol";
-import { IPolyNftFusionImp } from "./interface/IPolyNftFusionImp.sol";
+import { IPolyNftErc721, IERC721 } from "./Interface/IPolyNftErc721.sol";
+import { IPolyNftFusionImp } from "./Interface/IPolyNftFusionImp.sol";
 
 contract PolyNftRegistry is Ownable {
     /// @param fusionCost default in ETH
@@ -33,7 +33,7 @@ contract PolyNftRegistry is Ownable {
         orderInfoHashMap[orderInfoHash] = msg.sender;
     }
 
-    // deregister
+    // deregister will implement later
     function deregister(OrderInfo calldata orderInfoArg) external {}
 
     // will call fuse() of implementation address
@@ -66,7 +66,11 @@ contract PolyNftRegistry is Ownable {
         // call the implemnation address
         address polyNftErc721 = orderInfosArg[0].polyNftErc721;
         address fusionImp = IPolyNftErc721(polyNftErc721).getFusionImplementation();
-        bytes memory fusionAttribute = IPolyNftFusionImp(fusionImp).fuse(attributes);
+        bytes memory fusionAttribute;
+        
+        if (fusionImp != address(0)) {
+            fusionAttribute = IPolyNftFusionImp(fusionImp).fuse(attributes);
+        }
 
         // mint fusion NFT
         IPolyNftErc721(polyNftErc721).mint(msg.sender, fusionAttribute, description);

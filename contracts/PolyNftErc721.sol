@@ -28,7 +28,7 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         registry = PolyNftFactory(factory).registry();
     }
 
-    function mint(address to, string calldata tokenURI, bytes calldata attribute, string memory description) external  {
+    function mint(address to, string memory tokenURI, bytes memory attribute, string memory description) external  {
         // TODO: add access control, owner, registry or everyone
 
         mint(to);
