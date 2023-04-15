@@ -52,7 +52,7 @@ export function Mint() {
     return (
         <>
             <Header />
-            <Grid p="16px" pt="40px" justifyContent={"center"} alignItems={"center"} gap="28px" h="80vh">
+            <Grid bgColor="black" p="16px" pt="120px" justifyContent={"center"} alignItems={"center"} h="100vh">
                 {!selectedImage && (
                     <Grid
                         w="350px"
