@@ -110,4 +110,8 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
     function getTokenAttribute(uint256 tokenId) public view returns (bytes memory) {
         return attributeMap[tokenId];
     }
+
+    function getFusionImplementation() external view returns (address) {
+        return fusionImplementation;
+    }
 }
