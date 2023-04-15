@@ -12,7 +12,7 @@ export function Layout({ children }: LayoutProps) {
             <Header />
             <Grid h="calc(100vh - 80px" templateColumns={"auto 1fr"}>
                 <SideBar />
-                <Box p={"36px"} bgColor="black">
+                <Box p={"36px"} bgColor="black" h="calc(100vh - 80px)" overflow={"scroll"}>
                     {children}
                 </Box>
             </Grid>

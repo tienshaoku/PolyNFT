@@ -1,5 +1,6 @@
-import { Heading } from "@chakra-ui/react"
+import { Box, Grid } from "@chakra-ui/react"
 import { Layout } from "Layout"
+import { Loading } from "components/Loading"
 import NFTGrid from "components/NFTGrid"
 import { NFTItemProps } from "components/NFTItem"
 import { POLY_NFT_FACTORY_ADDR, POLY_NFT_REGISTRY_ADDR } from "constants/address"
@@ -39,6 +40,7 @@ export function Profile() {
                             imageUri: v.tokenURI,
                             imageDescription: v.description,
                         },
+                        isListed: false,
                     })),
                 )
                 setRegisteredNftItems(
@@ -48,6 +50,7 @@ export function Profile() {
                             imageUri: _registeredNftItemsUri[i],
                             imageDescription: v.description,
                         },
+                        isListed: true,
                     })),
                 )
             }
@@ -58,10 +61,25 @@ export function Profile() {
     const handleSelect = () => {}
     return (
         <Layout>
-            <Heading>Unlisted:</Heading>
-            <NFTGrid itemClickHandler={handleSelect} items={unregisteredNftItems} marginBottom={4} />
-            <Heading>Listed:</Heading>
-            <NFTGrid itemClickHandler={handleSelect} items={registeredNftItems} marginBottom={4} />
+            <Grid gap="32px" h="100%">
+                {(unregisteredNftItems.length === 0 || registeredNftItems.length === 0) && <Loading />}
+                {unregisteredNftItems.length !== 0 && (
+                    <Box>
+                        <Box fontWeight={"bold"} fontSize={"24px"}>
+                            Unlisted:
+                        </Box>
+                        <NFTGrid itemClickHandler={handleSelect} items={unregisteredNftItems} marginBottom={4} />
+                    </Box>
+                )}
+                {registeredNftItems.length !== 0 && (
+                    <Box>
+                        <Box fontWeight={"bold"} fontSize={"24px"}>
+                            Listed:
+                        </Box>
+                        <NFTGrid itemClickHandler={handleSelect} items={registeredNftItems} marginBottom={4} />
+                    </Box>
+                )}
+            </Grid>
         </Layout>
     )
 }
