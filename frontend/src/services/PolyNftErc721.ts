@@ -81,8 +81,8 @@ class PolyNftErc721Client {
         return array.map(val => bigNum2Big(val, 0))
     }
 
-    async getTotalSupply(address: string, contractAddr: string, signer?: Signer): Promise<Big> {
-        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
+    async getTotalSupply(nftProjectAddr: string, signer?: Signer): Promise<Big> {
+        const polyNftErc721 = await this.getPolyNftErc721(nftProjectAddr, signer)
         return bigNum2Big(await polyNftErc721.callStatic.totalSupply(), 0)
     }
 

@@ -13,10 +13,10 @@ interface IPolyNftErc721 is IERC721 {
 
     function mint(
         address to,
-        bytes memory tokenURO,
+        string memory tokenURI,
         bytes memory attribute,
         string memory description,
-        uint256[] memory sourceTokenIds
+        uint256[] memory fusionSourceTokenIds
     ) external;
 
     function getTokenAttribute(uint256 tokenId) external view returns (bytes memory);
