@@ -39,6 +39,7 @@ contract PolyNftRegistry is Ownable {
         uint256[] fusionSourceTokenIds;
         address polyNftErc721;
         uint256 fusionCost;
+        uint256 timestamp;
     }
 
     // fee ratio of platform
@@ -54,10 +55,10 @@ contract PolyNftRegistry is Ownable {
 
     function register(RegisterInputParam calldata registerInputArg) external {
         // PNR_NO: not owner
-        require(
-            IPolyNftErc721(registerInputArg.polyNftErc721).ownerOf(registerInputArg.tokenId) == msg.sender,
-            "PNR_NO"
-        );
+        // require(
+        //     IPolyNftErc721(registerInputArg.polyNftErc721).ownerOf(registerInputArg.tokenId) == msg.sender,
+        //     "PNR_NO"
+        // );
 
         OrderInfo memory orderInfo = OrderInfo(
             registerInputArg.polyNftErc721,
@@ -72,7 +73,7 @@ contract PolyNftRegistry is Ownable {
         orderMapByPolyNftErc721[orderInfo.polyNftErc721].push(orderInfo);
 
         bytes32 orderInfoHash = keccak256(
-            abi.encodePacked(orderInfo.polyNftErc721, orderInfo.tokenId, block.timestamp)
+            abi.encodePacked(orderInfo.polyNftErc721, orderInfo.tokenId, orderInfo.timestamp)
         );
         ownerMapByOrderHash[orderInfoHash] = msg.sender;
     }
@@ -103,7 +104,11 @@ contract PolyNftRegistry is Ownable {
             payable(
                 ownerMapByOrderHash[
                     keccak256(
-                        abi.encodePacked(orderInfosArg[i].polyNftErc721, orderInfosArg[i].tokenId, block.timestamp)
+                        abi.encodePacked(
+                            orderInfosArg[i].polyNftErc721,
+                            orderInfosArg[i].tokenId,
+                            orderInfosArg[i].timestamp
+                        )
                     )
                 ]
             ).transfer((orderInfosArg[i].fusionCost * (1e6 - FEE_RATIO)) / 1e6);
@@ -146,7 +151,8 @@ contract PolyNftRegistry is Ownable {
                 orderInfo.description,
                 IPolyNftErc721(orderInfo.polyNftErc721).getFusionSourceTokenIds(orderInfo.tokenId),
                 orderInfo.polyNftErc721,
-                orderInfo.fusionCost
+                orderInfo.fusionCost,
+                orderInfo.timestamp
             );
         }
 
