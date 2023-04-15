@@ -1,0 +1,2 @@
+export const POLY_NFt_ERC_721_ADDR = ""
+export const POLY_NFt_REGISTRY_ADDR = "0xeA9f323a2eDab53B041fb08e3D0Aa71CCc65F172"

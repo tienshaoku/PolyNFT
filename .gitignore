@@ -6,3 +6,4 @@ cache/
 artifacts/
 .gas-snapshot
 node_modules
+.env
