@@ -4,7 +4,16 @@ import { ConnectKitButton } from "connectkit"
 
 export function Header() {
     return (
-        <Flex bgColor="white" h="60px" justifyContent={"space-between"} alignItems={"center"} px="10px" py="40px">
+        <Flex
+            position="fixed"
+            bgColor="white"
+            h="60px"
+            w="100%"
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            px="10px"
+            py="40px"
+        >
             <Flex>
                 <Image src={logo} w="60px" />
             </Flex>
