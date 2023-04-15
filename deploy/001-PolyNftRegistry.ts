@@ -9,9 +9,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         from: deployer.address,
         contract: "PolyNftRegistry",
         args: [],
-        skipIfAlreadyDeployed: true,
         proxy: false,
-        log: true
+        log: true,
     })
 }
 
