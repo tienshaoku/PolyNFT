@@ -2,7 +2,6 @@ import { JsonRpcProvider, getNetwork } from "@ethersproject/providers"
 import { RPC_URL_HTTPS } from "constants/env"
 import { ContractReceipt, Signer, ethers } from "ethers"
 import { PolyNftFactory, PolyNftFactory__factory } from "../typechain"
-import { bigNum2Big } from "../utils/number"
 
 class PolyNftFactoryClient {
     constructor(private readonly rpcUrl: string) {}
@@ -11,15 +10,9 @@ class PolyNftFactoryClient {
         return PolyNftFactory__factory.connect(contractAddr, signer ? signer : provider)
     }
 
-    async getProjectNames(contractAddr: string, signer?: Signer): Promise<string[]> {
+    async getProjectsRegistered(contractAddr: string, signer?: Signer): Promise<string[]> {
         const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
-        let projectCount = await polyNftFactory.callStatic.projectCount().then(it => bigNum2Big(it, 0).toNumber())
-        let projects: string[] = []
-        for (let i = 0; i < projectCount; i++) {
-            const project = await polyNftFactory.callStatic.project(i)
-            projects.push(project)
-        }
-        return projects
+        return await polyNftFactory.callStatic.getProjects()
     }
 
     async createERC721(
