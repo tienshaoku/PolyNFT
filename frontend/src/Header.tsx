@@ -25,7 +25,7 @@ export function Header() {
                     <Link href="/list">My List</Link>
                 </Box>
                 <Box cursor={"pointer"} textDecoration={"underline"}>
-                    <Link href="/poly">Poly</Link>
+                    <Link href="/merge">Merge</Link>
                 </Box>
             </Flex>
             <ConnectKitButton />

@@ -3,9 +3,9 @@ import { ChakraProvider, theme } from "@chakra-ui/react"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom"
 import { Home } from "./Home"
 
+import { Merge } from "Merge"
 import { Mint } from "Mint"
 import { MyList } from "MyList"
-import { Poly } from "Poly"
 import { ConnectKitProvider } from "connectkit"
 import { useEffect } from "react"
 import { WagmiConfig, useAccount } from "wagmi"
@@ -31,7 +31,7 @@ export const App = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/mint/*" element={<Mint />} />
                         <Route path="/list/*" element={<MyList />} />
-                        <Route path="/poly/*" element={<Poly />} />
+                        <Route path="/merge/*" element={<Merge />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                 </ConnectKitProvider>
