@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "hardhat compile",
+    "build": "hardhat compile && cd ./frontend && npm run typechain",
     "clean": "rm -rf typechain && rm -rf artifacts && rm -rf cache",
     "deploy:testnet": "hardhat deploy --network optimismGoerli"
   },

@@ -8,8 +8,7 @@ contract PolyNftFactory is Ownable {
     mapping(address => address) public erc721Owner;
 
     // TODO: need to add whitelist logic to prevent non-allowed project
-    uint256 public projectCount;
-    string[] public project;
+    string[] public projects;
     mapping(string => address) public projectMap;
 
     constructor(address registryArg) {
@@ -30,10 +29,13 @@ contract PolyNftFactory is Ownable {
         address erc721Addr = address(erc721);
         erc721Owner[erc721Addr] = msg.sender;
 
-        projectCount++;
-        project.push(projectName);
+        projects.push(projectName);
         projectMap[projectName] = erc721Addr;
 
         return erc721Addr;
+    }
+
+    function getProjects() external view returns(string[] memory) {
+        return projects;
     }
 }
