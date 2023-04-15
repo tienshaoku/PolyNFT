@@ -14,9 +14,7 @@ export function AllToken() {
     useEffect(() => {
         async function init() {
             const tokenAddress = await polyNftFactoryClient.getProjectErc721ByName(projectName!, POLY_NFT_FACTORY_ADDR)
-            console.log("debug:", "tokenAddress:", tokenAddress)
             const tokenInfos = await polyNftErc721Client.getAllTokensInfo(tokenAddress)
-            console.log("debug:", "tokenInfos:", tokenInfos)
             setTokenInfos(tokenInfos)
         }
         init()
