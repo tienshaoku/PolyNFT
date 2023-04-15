@@ -1,9 +1,17 @@
 import { JsonRpcProvider, getNetwork } from "@ethersproject/providers"
+import Big from "big.js"
 import { RPC_URL_HTTPS } from "constants/env"
 import { ContractReceipt, Signer } from "ethers"
-import { PolyNftErc721, PolyNftErc721__factory } from "../typechain"
 import { big2BigNum, bigNum2Big } from "utils/number"
-import Big from "big.js"
+import { PolyNftErc721, PolyNftErc721__factory } from "../typechain"
+
+export interface IErc721TokenInfo {
+    tokenId: string
+    tokenURI: string
+    attribute: string
+    description: string
+    fusionSourceTokenIds: string[]
+}
 
 class PolyNftErc721Client {
     constructor(private readonly rpcUrl: string) {}
@@ -71,6 +79,26 @@ class PolyNftErc721Client {
         const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
         const array = await polyNftErc721.callStatic.getTokenIdsByOwner(address)
         return array.map(val => bigNum2Big(val, 0))
+    }
+
+    async getTotalSupply(address: string, contractAddr: string, signer?: Signer): Promise<Big> {
+        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
+        return bigNum2Big(await polyNftErc721.callStatic.totalSupply(), 0)
+    }
+
+    // TODO: need to implement getTokenInfo in contract
+    async getTokenInfo(tokenId: Big, contractAddr: string, signer?: Signer): Promise<IErc721TokenInfo> {
+        const tokenURI = await this.getTokenURI(tokenId, contractAddr, signer)
+        const attribute = await this.getAttribute(tokenId, contractAddr, signer)
+        const description = await this.getDescription(tokenId, contractAddr, signer)
+        const fusionSourceTokenIds = await this.getFusionSourceTokenIds(tokenId, contractAddr, signer)
+        return {
+            tokenId: tokenId.toString(),
+            tokenURI,
+            attribute,
+            description,
+            fusionSourceTokenIds: fusionSourceTokenIds.map(val => val.toString()),
+        }
     }
 }
 

@@ -29,7 +29,7 @@ class PolyNftFactoryClient {
         return await polyNftFactory.callStatic.getProjects()
     }
 
-    async getProjectByErc721Name(name: string, contractAddr: string, signer?: Signer): Promise<string> {
+    async getProjectErc721ByName(name: string, contractAddr: string, signer?: Signer): Promise<string> {
         const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
         return await polyNftFactory.callStatic.projectMap(name)
     }

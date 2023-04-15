@@ -5,7 +5,6 @@ import { ConnectKitButton } from "connectkit"
 export function Header() {
     return (
         <Flex
-            position="fixed"
             bgColor="white"
             h="60px"
             w="100%"
@@ -18,6 +17,9 @@ export function Header() {
                 <Image src={logo} w="60px" />
             </Flex>
             <Flex color="black" gap="36px" fontWeight={"bold"}>
+                <Box cursor={"pointer"} textDecoration={"underline"}>
+                    <Link href="/project">Project</Link>
+                </Box>
                 <Box cursor={"pointer"} textDecoration={"underline"}>
                     <Link href="/mint">Mint</Link>
                 </Box>

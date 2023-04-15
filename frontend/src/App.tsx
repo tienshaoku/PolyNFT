@@ -7,6 +7,7 @@ import { Merge } from "Merge"
 import { Mint } from "Mint"
 import { MyList } from "MyList"
 import { ProjectList } from "ProjectList"
+import { ProjectListDetail } from "ProjectListDetail"
 import { ConnectKitProvider } from "connectkit"
 import { useEffect } from "react"
 import { WagmiConfig, useAccount } from "wagmi"
@@ -30,7 +31,10 @@ export const App = () => {
                 <ConnectKitProvider>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/project/*" element={<ProjectList />} />
+                        <Route path="/project">
+                            <Route path="/project" element={<ProjectList />} />
+                            <Route path="/project/:projectName" element={<ProjectListDetail />} />
+                        </Route>
                         <Route path="/mint/*" element={<Mint />} />
                         <Route path="/list/*" element={<MyList />} />
                         <Route path="/merge/*" element={<Merge />} />
