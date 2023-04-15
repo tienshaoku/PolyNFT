@@ -112,6 +112,18 @@ class PolyNftErc721Client {
             fusionSourceTokenIds: info.fusionSourceTokenIds.map(v => v.toString()),
         }))
     }
+
+    async getAllTokenInfoByOwner(address: string, contractAddr: string, signer?: Signer): Promise<IErc721TokenInfo[]> {
+        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
+        const rawAllTokensInfoByOwner = await polyNftErc721.callStatic.getAllTokenInfoByOwner(address)
+        return rawAllTokensInfoByOwner.map(info => ({
+            tokenId: info.tokenId.toString(),
+            tokenURI: info.tokenURI,
+            attribute: info.attribute,
+            description: info.description,
+            fusionSourceTokenIds: info.fusionSourceTokenIds.map(v => v.toString()),
+        }))
+    }
 }
 
 export const polyNftErc721Client = new PolyNftErc721Client(RPC_URL_HTTPS)
