@@ -14,7 +14,7 @@ async function main(): Promise<void> {
     const port = 3001;
 
     app.use(cors());
-    app.use(express.json());
+    app.use(express.json({limit: '50mb'}));
     
     const handlers = Container.get(Handlers)
     app.post('/api/v1/upload', handlers.upload.bind(handlers));
