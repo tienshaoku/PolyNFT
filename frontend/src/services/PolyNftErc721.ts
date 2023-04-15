@@ -1,7 +1,7 @@
 import { JsonRpcProvider, getNetwork } from "@ethersproject/providers"
 import { RPC_URL_HTTPS } from "constants/env"
 import { Signer } from "ethers"
-import { PolyNftErc721, PolyNftErc721__factory } from "../../../typechain-types"
+import { PolyNftErc721, PolyNftErc721__factory } from "../typechain"
 
 class PolyNftErc721Client {
     constructor(private readonly rpcUrl: string) {}
