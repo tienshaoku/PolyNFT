@@ -1,8 +1,7 @@
 import { Box, Button, Flex, Grid } from "@chakra-ui/react"
 import { Header } from "Header"
-import { API_UPLOAD_IMG } from "constants/api"
 import { useCallback, useState } from "react"
-import { getBase64StringFromDataURL } from "utils"
+import { ipfsClient } from "services/IPFS"
 
 export function Mint() {
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
@@ -24,25 +23,14 @@ export function Mint() {
     const handleUploadImg = useCallback<React.MouseEventHandler<HTMLButtonElement>>(async () => {
         const reader = new FileReader()
         reader.readAsDataURL(selectedImage as Blob)
-        reader.onload = () => {
-            const base64Str = getBase64StringFromDataURL(reader.result)
-            fetch(API_UPLOAD_IMG, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    payload: base64Str,
-                }),
-            })
-                .then(resp => resp.json())
-                .then(data => {
-                    if (data.errors) {
-                        alert(data.errors)
-                    } else {
-                        setIpfsUrl(data.ipfs)
-                    }
-                })
+        reader.onload = async () => {
+            const res = await ipfsClient.uploadFile(reader)
+            const data = await res.json()
+            if (data.errors) {
+                alert(data.errors)
+            } else {
+                setIpfsUrl(data.ipfs)
+            }
         }
         reader.onerror = error => {
             console.log("load img error:")
