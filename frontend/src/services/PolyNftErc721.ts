@@ -31,11 +31,6 @@ class PolyNftErc721Client {
         return tx.wait()
     }
 
-    async getTokenURI(tokenId: Big, contractAddr: string, signer?: Signer): Promise<string> {
-        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
-        return await polyNftErc721.callStatic.tokenURI(big2BigNum(tokenId, 0))
-    }
-
     async getFactory(contractAddr: string, signer?: Signer): Promise<string> {
         const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
         return await polyNftErc721.callStatic.factory()
@@ -61,7 +56,12 @@ class PolyNftErc721Client {
         return await polyNftErc721.callStatic.descriptionMap(big2BigNum(tokenId, 0))
     }
 
-    async getSourceTokenIdArray(tokenId: Big, contractAddr: string, signer?: Signer): Promise<Big[]> {
+    async getTokenURI(tokenId: Big, contractAddr: string, signer?: Signer): Promise<string> {
+        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
+        return await polyNftErc721.callStatic.tokenURI(big2BigNum(tokenId, 0))
+    }
+
+    async getFusionSourceTokenIds(tokenId: Big, contractAddr: string, signer?: Signer): Promise<Big[]> {
         const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
         const array = await polyNftErc721.callStatic.getFusionSourceTokenIds(big2BigNum(tokenId, 0))
         return array.map(val => bigNum2Big(val, 0))

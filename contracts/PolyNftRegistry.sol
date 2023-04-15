@@ -15,27 +15,27 @@ contract PolyNftRegistry is Ownable {
     }
 
     // fee ratio of platform
-    uint24 internal constant _FEE_RATIO = 0.01e6; // 1% in decimal 6
-    uint24 internal constant _MAX_FUSE_AMOUNT = 10; // TODO: need to add set function (onlyOwner)
+    uint24 public constant FEE_RATIO = 0.01e6; // 1% in decimal 6
+    uint24 public constant MAX_FUSION_AMOUNT = 10; // TODO: need to add set function (onlyOwner)
 
-    // 721 -> token order list
-    mapping(address => OrderInfo[]) public polyNftErc721OrderMap;
+    // 721 -> token order
+    mapping(address => OrderInfo[]) public orderMapByPolyNftErc721;
     // owner -> token order
-    mapping(address => OrderInfo[]) public orderMap;
+    mapping(address => OrderInfo[]) public orderMapByOwner;
     // token order hash -> owner
-    mapping(bytes32 => address) public orderInfoHashMap;
+    mapping(bytes32 => address) public ownerMapByOrderHash;
 
     function register(OrderInfo calldata orderInfoArg) external {
         // PNR_NO: not owner
         require(IPolyNftErc721(orderInfoArg.polyNftErc721).ownerOf(orderInfoArg.tokenId) == msg.sender, "PNR_NO");
         IPolyNftErc721(orderInfoArg.polyNftErc721).transferFrom(msg.sender, address(this), orderInfoArg.tokenId);
-        orderMap[msg.sender].push(orderInfoArg);
-        polyNftErc721OrderMap[orderInfoArg.polyNftErc721].push(orderInfoArg);
+        orderMapByOwner[msg.sender].push(orderInfoArg);
+        orderMapByPolyNftErc721[orderInfoArg.polyNftErc721].push(orderInfoArg);
 
         bytes32 orderInfoHash = keccak256(
             abi.encodePacked(orderInfoArg.polyNftErc721, orderInfoArg.tokenId, block.timestamp)
         );
-        orderInfoHashMap[orderInfoHash] = msg.sender;
+        ownerMapByOrderHash[orderInfoHash] = msg.sender;
     }
 
     // deregister will implement later
@@ -50,7 +50,7 @@ contract PolyNftRegistry is Ownable {
         uint256 orderInfoLength = orderInfosArg.length;
 
         // PNR_TMO: too much orders
-        require(orderInfoLength <= _MAX_FUSE_AMOUNT, "PNR_TMO");
+        require(orderInfoLength <= MAX_FUSION_AMOUNT, "PNR_TMO");
 
         uint256 totalFusionCost;
         bytes[] memory attributes = new bytes[](orderInfoLength);
@@ -61,12 +61,12 @@ contract PolyNftRegistry is Ownable {
             attributes[i] = IPolyNftErc721(orderInfosArg[i].polyNftErc721).getTokenAttribute(orderInfosArg[i].tokenId);
             sourceTokenIds[i] = orderInfosArg[i].tokenId;
             payable(
-                orderInfoHashMap[
+                ownerMapByOrderHash[
                     keccak256(
                         abi.encodePacked(orderInfosArg[i].polyNftErc721, orderInfosArg[i].tokenId, block.timestamp)
                     )
                 ]
-            ).transfer((orderInfosArg[i].fusionCost * (1e6 - _FEE_RATIO)) / 1e6);
+            ).transfer((orderInfosArg[i].fusionCost * (1e6 - FEE_RATIO)) / 1e6);
 
             // check all of the polyNftErc721 is the same
             if (i > 0) {
@@ -89,5 +89,13 @@ contract PolyNftRegistry is Ownable {
 
         // mint fusion NFT
         IPolyNftErc721(polyNftErc721).mint(msg.sender, tokenURI, fusionAttribute, description, sourceTokenIds);
+    }
+
+    function getOrdersByPolyNftErc721(address erc721) external view returns(OrderInfo[] memory) {
+        return orderMapByPolyNftErc721[erc721];
+    }
+
+    function getOrdersByOwner(address ownerArg) external view returns(OrderInfo[] memory) {
+        return orderMapByOwner[ownerArg];
     }
 }

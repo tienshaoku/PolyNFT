@@ -1,5 +1,11 @@
+## First time building
+
 1. `npm i` under root
-2. `npm run build` under root; might need `.env` from discord channel
-3. `npm i` under `frontend/`
-4. `npm run typechain` under `frontend/`
-5. `npm run start` under `frontend/`
+2. `npm i` under `frontend/`
+3. `npm run build` under root
+4. `npm run start` under `frontend/`
+
+## Second time building
+
+1. `npm run build` under root
+2. `npm run start` under `frontend/`
