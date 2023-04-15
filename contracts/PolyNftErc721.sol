@@ -60,11 +60,11 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         return bytes(_tokenURIMap[tokenId]).length > 0 ? _tokenURIMap[tokenId] : _baseURI();
     }
 
-    function getFusionSourceTokenIds(uint256 tokenId) public view returns(uint256[] memory) {
+    function getFusionSourceTokenIds(uint256 tokenId) public view returns (uint256[] memory) {
         return fusionSourceTokenIdsMap[tokenId];
     }
 
-    function getTokenIdsByOwner(address ownerArg) public view returns(uint256[] memory) {
+    function getTokenIdsByOwner(address ownerArg) public view returns (uint256[] memory) {
         uint256 balance = balanceOf(ownerArg);
         uint256[] memory tokens = new uint256[](balance);
         uint256 index = 0;
@@ -78,7 +78,7 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
         return tokens;
     }
 
-    function getAllTokenInfoByOwner(address ownerArg) public view returns(TokenInfo[] memory) {
+    function getAllTokenInfoByOwner(address ownerArg) public view returns (TokenInfo[] memory) {
         uint256[] memory tokenIds = getTokenIdsByOwner(ownerArg);
         TokenInfo[] memory allTokensInfo = new TokenInfo[](tokenIds.length);
         for (uint256 i = 0; i < tokenIds.length; i++) {
@@ -88,21 +88,26 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
     }
 
     function getTokenInfo(uint256 tokenId) public view returns (TokenInfo memory) {
-        return TokenInfo(
-            tokenId,
-            tokenURI(tokenId),
-            attributeMap[tokenId],
-            descriptionMap[tokenId],
-            fusionSourceTokenIdsMap[tokenId]
-        );
+        return
+            TokenInfo(
+                tokenId,
+                tokenURI(tokenId),
+                attributeMap[tokenId],
+                descriptionMap[tokenId],
+                fusionSourceTokenIdsMap[tokenId]
+            );
     }
 
-    function getAllTokensIndo() public view returns(TokenInfo[] memory) {
+    function getAllTokensInfo() public view returns (TokenInfo[] memory) {
         uint256 totalSupply = totalSupply();
         TokenInfo[] memory tokens = new TokenInfo[](totalSupply);
         for (uint256 i = 0; i < totalSupply; i++) {
             tokens[i] = getTokenInfo(i);
         }
         return tokens;
+    }
+
+    function getTokenAttribute(uint256 tokenId) public view returns (bytes memory) {
+        return attributeMap[tokenId];
     }
 }
