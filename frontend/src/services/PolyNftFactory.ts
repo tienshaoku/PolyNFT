@@ -10,11 +10,6 @@ class PolyNftFactoryClient {
         return PolyNftFactory__factory.connect(contractAddr, signer ? signer : provider)
     }
 
-    async getProjectsRegistered(contractAddr: string, signer?: Signer): Promise<string[]> {
-        const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
-        return await polyNftFactory.callStatic.getProjects()
-    }
-
     async createERC721(
         projectName: string,
         erc721Name: string,
@@ -27,6 +22,11 @@ class PolyNftFactoryClient {
         const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
         const tx = await polyNftFactory.create(projectName, erc721Name, symbol, tokenURI, fusionImplementation)
         return tx.wait()
+    }
+
+    async getProjectsRegistered(contractAddr: string, signer?: Signer): Promise<string[]> {
+        const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
+        return await polyNftFactory.callStatic.getProjects()
     }
 }
 
