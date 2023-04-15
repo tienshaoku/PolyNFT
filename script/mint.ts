@@ -1,6 +1,10 @@
 import { ethers, deployments } from "hardhat"
 import { IPolyNftErc721, PolyNftFactory } from "../typechain-types"
 
+function sleep(ms: number): Promise<unknown> {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 async function main() {
     const polyNftFactoryDeployments = await deployments.get("PolyNftFactory")
     const polyNftFactoryInstance = (await ethers.getContractAt(
@@ -33,6 +37,7 @@ async function main() {
             []
         )
         console.log(`Minted ${i}th token`)
+        await sleep(10000)
     }
 }
 
