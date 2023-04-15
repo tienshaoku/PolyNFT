@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/react"
 import { Header } from "Header"
 
-export function Mint() {
+export function Poly() {
     return (
         <>
             <Header />
-            <Box>Mint Page</Box>
+            <Box>Poly Page</Box>
         </>
     )
 }
