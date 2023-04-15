@@ -18,13 +18,13 @@ export function Header() {
             </Flex>
             <Flex color="black" gap="36px" fontWeight={"bold"}>
                 <Box cursor={"pointer"} textDecoration={"underline"}>
-                    <Link href="/project">Project</Link>
+                    <Link href="/all">All Tokens</Link>
+                </Box>
+                <Box cursor={"pointer"} textDecoration={"underline"}>
+                    <Link href="/profile">Profile</Link>
                 </Box>
                 <Box cursor={"pointer"} textDecoration={"underline"}>
                     <Link href="/mint">Mint</Link>
-                </Box>
-                <Box cursor={"pointer"} textDecoration={"underline"}>
-                    <Link href="/list">My List</Link>
                 </Box>
                 <Box cursor={"pointer"} textDecoration={"underline"}>
                     <Link href="/merge">Merge</Link>

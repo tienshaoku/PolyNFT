@@ -1,7 +1,8 @@
 import { Grid } from "@chakra-ui/react"
 import { Header } from "Header"
 
-export function MyList() {
+// my profile => registered list, deregistered button
+export function Profile() {
     return (
         <>
             <Header />

@@ -1,13 +1,14 @@
-import { Box, Grid, Image } from "@chakra-ui/react"
-import { Header } from "Header"
+import { Box, Flex, Image } from "@chakra-ui/react"
+import { Layout } from "Layout"
 import Big from "big.js"
+import { Loading } from "components/Loading"
 import { POLY_NFT_FACTORY_ADDR } from "constants/address"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { IErc721TokenInfo, polyNftErc721Client } from "services/PolyNftErc721"
 import { polyNftFactoryClient } from "services/PolyNftFactory"
 
-export function ProjectListDetail() {
+export function AllToken() {
     const { projectName } = useParams()
     const [tokenInfos, setTokenInfos] = useState<IErc721TokenInfo[]>([])
 
@@ -32,26 +33,19 @@ export function ProjectListDetail() {
     }, [projectName])
 
     return (
-        <>
-            <Header />
-            <Grid
-                bgColor="black"
-                h="calc(100vh - 80px)"
-                p="24px"
-                color="white"
-                overflow={"scroll"}
-                gap="24px"
-                flexDirection={"column"}
-                // templateColumns={"repeat(4, 1fr)"}
-            >
-                {tokenInfos.map((info, index) => (
-                    <Box key={index}>
-                        <Box fontWeight={"bold"}>ID: {info.tokenId}</Box>
-                        <Image src={info.tokenURI} w="350px" h="350px" />
-                        <Box color="gray">{info.description}</Box>
-                    </Box>
-                ))}
-            </Grid>
-        </>
+        <Layout>
+            {tokenInfos.length === 0 && <Loading />}
+            {tokenInfos.length !== 0 && (
+                <Flex flexWrap={"wrap"} gap="32px">
+                    {tokenInfos.map((info, index) => (
+                        <Box key={index}>
+                            <Box fontWeight={"bold"}>ID: {info.tokenId}</Box>
+                            <Image src={info.tokenURI} w="350px" h="350px" />
+                            <Box color="gray">{info.description}</Box>
+                        </Box>
+                    ))}
+                </Flex>
+            )}
+        </Layout>
     )
 }
