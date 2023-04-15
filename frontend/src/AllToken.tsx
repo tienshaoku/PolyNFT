@@ -1,6 +1,5 @@
 import { Box, Flex, Image } from "@chakra-ui/react"
 import { Layout } from "Layout"
-import Big from "big.js"
 import { Loading } from "components/Loading"
 import { POLY_NFT_FACTORY_ADDR } from "constants/address"
 import { useEffect, useState } from "react"
@@ -14,18 +13,9 @@ export function AllToken() {
 
     useEffect(() => {
         async function init() {
-            const projectErc721Address = await polyNftFactoryClient.getProjectErc721ByName(
-                projectName!,
-                POLY_NFT_FACTORY_ADDR,
-            )
-            const totalSupply = Number((await polyNftErc721Client.getTotalSupply(projectErc721Address)).toString())
-
-            const tokenInfoArray: IErc721TokenInfo[] = []
-            for (let i = 0; i < totalSupply; i++) {
-                const tokenInfo = await polyNftErc721Client.getTokenInfo(Big(i), projectErc721Address)
-                tokenInfoArray.push(tokenInfo)
-            }
-            setTokenInfos(tokenInfoArray)
+            const tokenAddress = await polyNftFactoryClient.getProjectErc721ByName(projectName!, POLY_NFT_FACTORY_ADDR)
+            const tokenInfos = await polyNftErc721Client.getAllTokensInfo(tokenAddress)
+            setTokenInfos(tokenInfos)
         }
         init()
     }, [projectName])

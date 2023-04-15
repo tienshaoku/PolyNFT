@@ -100,6 +100,18 @@ class PolyNftErc721Client {
             fusionSourceTokenIds: fusionSourceTokenIds.map(val => val.toString()),
         }
     }
+
+    async getAllTokensInfo(contractAddr: string, signer?: Signer): Promise<IErc721TokenInfo[]> {
+        const polyNftErc721 = await this.getPolyNftErc721(contractAddr, signer)
+        const rawAllTokensInfo = await polyNftErc721.callStatic.getAllTokensIndo()
+        return rawAllTokensInfo.map(info => ({
+            tokenId: info.tokenId.toString(),
+            tokenURI: info.tokenURI,
+            attribute: info.attribute,
+            description: info.description,
+            fusionSourceTokenIds: info.fusionSourceTokenIds.map(v => v.toString()),
+        }))
+    }
 }
 
 export const polyNftErc721Client = new PolyNftErc721Client(RPC_URL_HTTPS)
