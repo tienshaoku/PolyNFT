@@ -55,10 +55,10 @@ contract PolyNftRegistry is Ownable {
 
     function register(RegisterInputParam calldata registerInputArg) external {
         // PNR_NO: not owner
-        // require(
-        //     IPolyNftErc721(registerInputArg.polyNftErc721).ownerOf(registerInputArg.tokenId) == msg.sender,
-        //     "PNR_NO"
-        // );
+        require(
+            IPolyNftErc721(registerInputArg.polyNftErc721).ownerOf(registerInputArg.tokenId) == msg.sender,
+            "PNR_NO"
+        );
 
         OrderInfo memory orderInfo = OrderInfo(
             registerInputArg.polyNftErc721,

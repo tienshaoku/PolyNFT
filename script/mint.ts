@@ -30,8 +30,9 @@ async function main() {
             ipfsArray[i],
             ethers.constants.HashZero,
             description[i],
-            [],
+            []
         )
+        console.log(`Minted ${i}th token`)
     }
 }
 

@@ -22,17 +22,17 @@ async function main() {
 
     await erc721Instance.approve(polyNftRegistryDeployments.address, 0)
     await polyNftRegistryInstance.register({
-        polyNftErc721: "0x6c4c42fE8cc35f58eda92EA68B4a56fB28921C29",
+        polyNftErc721: "0x7A45ffa6e41c5ACCE672AE2c09558666ACb5fdF2",
         tokenId: 0,
-        fusionCost: parseEther("0.01"),
+        fusionCost: parseEther("0.001"),
         description: `Register a new project to PolyNFT, tokenId: 0`,
     })
 
     await erc721Instance.approve(polyNftRegistryDeployments.address, 1)
     await polyNftRegistryInstance.register({
-        polyNftErc721: "0x6c4c42fE8cc35f58eda92EA68B4a56fB28921C29",
+        polyNftErc721: "0x7A45ffa6e41c5ACCE672AE2c09558666ACb5fdF2",
         tokenId: 1,
-        fusionCost: parseEther("0.01"),
+        fusionCost: parseEther("0.001"),
         description: `Register a new project to PolyNFT, tokenId: 1`,
     })
 }

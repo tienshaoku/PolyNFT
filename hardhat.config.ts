@@ -29,6 +29,14 @@ const config: HardhatUserConfig = {
         optimismGoerli: {
             url: process.env.OPTIMISM_GOERLI_WEB3_ENDPOINT,
             accounts: [process.env.POLY_NFT_DEPLOYER]
+        },
+        scroll: {
+            url: "https://alpha-rpc.scroll.io/l2",
+            accounts: [process.env.POLY_NFT_DEPLOYER]
+        },
+        polygonZkEvmTestnet: {
+            url: "https://rpc.public.zkevm-test.net",
+            accounts: [process.env.POLY_NFT_DEPLOYER]
         }
     },
     namedAccounts: {
