@@ -1,4 +1,4 @@
-import { Box, Grid } from "@chakra-ui/react"
+import { Box, Grid, Image } from "@chakra-ui/react"
 import { Header } from "Header"
 import Big from "big.js"
 import { POLY_NFT_FACTORY_ADDR } from "constants/address"
@@ -20,10 +20,8 @@ export function ProjectListDetail() {
             const totalSupply = Number(
                 (await polyNftErc721Client.getTotalSupply(projectErc721Address, projectErc721Address)).toString(),
             )
-            console.log("debug:", "totalSupply:", totalSupply)
 
             const tokenInfoArray: IErc721TokenInfo[] = []
-
             for (let i = 0; i < totalSupply; i++) {
                 const tokenInfo = await polyNftErc721Client.getTokenInfo(Big(i), projectErc721Address)
                 tokenInfoArray.push(tokenInfo)
@@ -36,14 +34,21 @@ export function ProjectListDetail() {
     return (
         <>
             <Header />
-            <Grid bgColor="black" h="calc(100vh - 80px)" p="24px" color="white">
+            <Grid
+                bgColor="black"
+                h="calc(100vh - 80px)"
+                p="24px"
+                color="white"
+                overflow={"scroll"}
+                gap="24px"
+                flexDirection={"column"}
+                // templateColumns={"repeat(4, 1fr)"}
+            >
                 {tokenInfos.map((info, index) => (
                     <Box key={index}>
-                        {info.description}
-                        {info.tokenId}
-                        {info.tokenURI}
-                        {info.attribute}
-                        {info.fusionSourceTokenIds}
+                        <Box fontWeight={"bold"}>ID: {info.tokenId}</Box>
+                        <Image src={info.tokenURI} w="350px" h="350px" />
+                        <Box color="gray">{info.description}</Box>
                     </Box>
                 ))}
             </Grid>
