@@ -13,10 +13,10 @@ class PolyNftFactoryClient {
 
     async getProjectNames(contractAddr: string, signer?: Signer): Promise<string[]> {
         const polyNftFactory = await this.getPolyNftFactory(contractAddr, signer)
-        let projectsNameLength = await polyNftFactory.callStatic.projectCount().then(it => bigNum2Big(it, 0).toNumber())
+        let projectCount = await polyNftFactory.callStatic.projectCount().then(it => bigNum2Big(it, 0).toNumber())
         let projects: string[] = []
-        for (let i = 0; i < projectsNameLength; i++) {
-            const project = await polyNftFactory.callStatic.projectsName(i)
+        for (let i = 0; i < projectCount; i++) {
+            const project = await polyNftFactory.callStatic.project(i)
             projects.push(project)
         }
         return projects
