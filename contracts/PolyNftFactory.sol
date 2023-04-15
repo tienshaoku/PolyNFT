@@ -7,7 +7,7 @@ contract PolyNftFactory is Ownable {
     address public registry;
     mapping(address => address) public erc721Owner;
 
-    // TODO: need to add whitelist logic to prevent non-allowed prohect
+    // TODO: need to add whitelist logic to prevent non-allowed project
     string[] public projectsName;
     mapping(string => address) public projectMap;
 

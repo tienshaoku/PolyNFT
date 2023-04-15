@@ -38,7 +38,11 @@ contract PolyNftRegistry is Ownable {
     function deregister(OrderInfo calldata orderInfoArg) external {}
 
     // will call fuse() of implementation address
-    function fuse(OrderInfo[] calldata orderInfosArg, string calldata description) external payable {
+    function fuse(
+        OrderInfo[] calldata orderInfosArg,
+        bytes calldata tokenURI,
+        string calldata description
+    ) external payable {
         uint256 orderInfoLength = orderInfosArg.length;
 
         // PNR_TMO: too much orders
@@ -46,10 +50,12 @@ contract PolyNftRegistry is Ownable {
 
         uint256 totalFusionCost;
         bytes[] memory attributes = new bytes[](orderInfoLength);
+        uint256[] memory sourceTokenIds = new uint256[](orderInfoLength);
 
         for (uint256 i = 0; i < orderInfoLength; ++i) {
             totalFusionCost += orderInfosArg[i].fusionCost;
             attributes[i] = IPolyNftErc721(orderInfosArg[i].polyNftErc721).getTokenAttribute(orderInfosArg[i].tokenId);
+            sourceTokenIds[i] = orderInfosArg[i].tokenId;
             payable(
                 orderInfoHashMap[
                     keccak256(
@@ -78,6 +84,6 @@ contract PolyNftRegistry is Ownable {
         }
 
         // mint fusion NFT
-        IPolyNftErc721(polyNftErc721).mint(msg.sender, fusionAttribute, description);
+        IPolyNftErc721(polyNftErc721).mint(msg.sender, tokenURI, fusionAttribute, description, sourceTokenIds);
     }
 }
