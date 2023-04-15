@@ -4,6 +4,14 @@ import { ERC721PresetMinterPauserAutoId } from "./ERC721PresetMinterPauserAutoId
 import { PolyNftFactory } from "./PolyNftFactory.sol";
 
 contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
+    struct TokenInfo {
+        uint256 tokenId;
+        string tokenURI;
+        bytes attribute;
+        string description;
+        uint256[] fusionSourceTokenIds;
+    }
+
     address public factory;
     address public registry;
     address public fusionImplementation;
@@ -68,5 +76,15 @@ contract PolyNftErc721 is ERC721PresetMinterPauserAutoId {
             }
         }
         return tokens;
+    }
+
+    function getTokenInfo(uint256 tokenId) public view returns (TokenInfo memory) {
+        return TokenInfo(
+            tokenId,
+            tokenURI(tokenId),
+            attributeMap[tokenId],
+            descriptionMap[tokenId],
+            fusionSourceTokenIdsMap[tokenId]
+        );
     }
 }
